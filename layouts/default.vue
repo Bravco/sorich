@@ -191,13 +191,16 @@
         padding: 1rem;
         z-index: 1;
         overflow: hidden;
-        color: black;
         background-color: white;
         box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, .1);
     }
 
     .nav-item:has(.nav-dropdown):hover .nav-dropdown {
         display: flex;
+    }
+
+    .nav-dropdown .nav-link {
+        color: black;
     }
 
     .nav-right {
