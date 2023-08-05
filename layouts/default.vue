@@ -3,8 +3,8 @@
         <header>
             <nav :class="{ 'scrolled': scrolled }">
                 <div class="nav-left">
-                    <Logo/>
-                    <ul class="nav-list">
+                    <Logo class="logo"/>
+                    <ul :class="['nav-list', { 'active': isMobileMenuActive }]">
                         <li class="nav-item">
                             <NuxtLink class="nav-link" to="/">Domov</NuxtLink>
                         </li>
@@ -14,16 +14,16 @@
                                 <Icon class="nav-dropdown-indicator" name="mdi:chevron-down" size="1.5rem"/>
                             </NuxtLink>
                             <ul class="nav-dropdown">
-                                <li class="nav-dropdown-item">
+                                <li>
                                     <NuxtLink class="nav-link" to="/">Tričká</NuxtLink>
                                 </li>
-                                <li class="nav-dropdown-item">
+                                <li>
                                     <NuxtLink class="nav-link" to="/">Mikiny</NuxtLink>
                                 </li>
-                                <li class="nav-dropdown-item">
+                                <li>
                                     <NuxtLink class="nav-link" to="/">Nohavice</NuxtLink>
                                 </li>
-                                <li class="nav-dropdown-item">
+                                <li>
                                     <NuxtLink class="nav-link" to="/">Doplnky</NuxtLink>
                                 </li>
                             </ul>
@@ -36,6 +36,9 @@
                     </button>
                     <button>
                         <Icon name="material-symbols:person-outline-rounded" size="1.5rem"/>
+                    </button>
+                    <button class="mobile-nav-btn" @click.prevent="toggleMobileNav" aria-label="Toggle mobile navigation">
+                        <Icon name="heroicons:bars-2" size="2rem"/>
                     </button>
                 </div>
             </nav>
@@ -102,7 +105,18 @@
 </template>
 
 <script setup>
+    const { afterEach } = useRouter();
+
     const scrolled = ref(false);
+    const isMobileMenuActive = ref(true);
+
+    function toggleMobileNav() {
+        isMobileMenuActive.value = !isMobileMenuActive.value;
+    }
+
+    afterEach(() => {
+        isMobileMenuActive.value = false;
+    });
 
     onMounted(() => {
         if (process.client) {
@@ -139,7 +153,7 @@
     }
 
     nav.scrolled {
-        background-color: rgba(0, 0, 0, .1);
+        background-color: rgba(0, 0, 0, .25);
         backdrop-filter: blur(1rem);
     }
 
@@ -191,6 +205,10 @@
         gap: 1rem;
     }
 
+    .mobile-nav-btn {
+        display: none;
+    }
+
     footer {
         flex-direction: column;
         padding: 0 10%;
@@ -232,5 +250,71 @@
 
     .footer-copyright {
         padding: 1rem;
+    }
+
+    @media only screen and (max-width: 768px) {
+        nav:has(.nav-list.active) {
+            background-color: unset;
+            backdrop-filter: unset;
+        }
+
+        .logo, .nav-right {
+            z-index: 1;
+        }
+
+        .nav-list {
+            width: 100%;
+            height: 100vh;
+            opacity: 0;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition-property: opacity, background-color, backdrop-filter;
+            transition-duration: 300ms;
+        }
+
+        .nav-list.active {
+            opacity: 1;
+            background-color: rgba(0, 0, 0, .25);
+            backdrop-filter: blur(1rem);
+        }
+
+        .nav-list:not(.active) {
+            pointer-events: none;
+        }
+
+        .nav-item {
+            text-align: center;
+        }
+
+        .nav-link {
+            font-size: 3rem;
+        }
+
+        .nav-dropdown-indicator {
+            display: none;
+        }
+
+        .nav-dropdown {
+            width: unset;
+            min-width: unset;
+            position: unset;
+            padding: unset;
+            overflow: unset;
+            color: unset;
+            background-color: unset;
+            box-shadow: unset;
+
+            display: flex;
+            gap: 2rem;
+            padding-top: 2rem;
+        }
+
+        .mobile-nav-btn {
+            display: unset;
+        }
     }
 </style>
