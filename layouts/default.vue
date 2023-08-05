@@ -108,7 +108,7 @@
     const { afterEach } = useRouter();
 
     const scrolled = ref(false);
-    const isMobileMenuActive = ref(true);
+    const isMobileMenuActive = ref(false);
 
     function toggleMobileNav() {
         isMobileMenuActive.value = !isMobileMenuActive.value;
@@ -145,7 +145,7 @@
         width: 100%;
         justify-content: space-between;
         position: fixed;
-        padding: 1rem 10%;
+        padding: 1rem var(--main-horizontal-padding);
         z-index: 100;
         transition-property: background-colorm backdrop-filter;
         transition-duration: 300ms;
@@ -210,11 +210,12 @@
 
     footer {
         flex-direction: column;
-        padding: 0 10%;
+        padding: 0 var(--main-horizontal-padding);
         background-color: black;
     }
 
     .footer-top {
+        width: 100%;
         display: grid;
         grid-template-columns: 2fr repeat(3, 1fr);
         gap: 2rem;
@@ -313,6 +314,11 @@
 
         .mobile-nav-btn {
             display: unset;
+        }
+
+        .footer-top {
+            display: flex;
+            flex-direction: column;
         }
     }
 </style>

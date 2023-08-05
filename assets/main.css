@@ -5,7 +5,10 @@
     --default-font-family: 'Barlow', sans-serif;
     --default-condensed-font-family: 'Barlow Condensed', sans-serif;
 
+    --color-primary: #DE2525;
     --color-text: white;
+
+    --main-horizontal-padding: 10%;
 }
 
 * {

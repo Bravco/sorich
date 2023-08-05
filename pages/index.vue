@@ -1,27 +1,63 @@
 <template>
     <div>
-        <section class="hero">
-            <div class="hero-imgs">
-                <nuxt-img v-for="i in 6" :key="i" class="hero-img" :src="`/images/hero${i}.webp`" :alt="`hero${i}`"/>
-            </div>
-            <h1 class="hero-heading">Muži<br>Ženy</h1>
+        <Hero/>
+        <section class="new">
+            <h2 class="new-heading">NOVÁ KOLEKCIA</h2>
+            <Swiper
+                class="new-swiper"
+                :modules="[SwiperAutoplay]"
+                :breakpoints="{
+                    1480: { slidesPerView: 3 },
+                    1024: { slidesPerView: 2 },
+                }"
+                :slides-per-view="1"
+                :centered-slides="true"
+                :grab-cursor="true"
+                :autoplay="{
+                    delay: 2000,
+                    pauseOnMouseEnter: true,
+                }"
+            >
+                <SwiperSlide v-for="(item, index) in newCollection" :key="index">
+                    <div class="product">
+                        <nuxt-img class="product-img" :src="item.url" alt="product-image"/>
+                        <span class="new-product-title">{{ item.title }}</span>
+                        <span class="product-price">{{ (item.price/100).toFixed(2) }}</span>
+                    </div>
+                </SwiperSlide>
+            </Swiper>
         </section>
     </div>
 </template>
 
+<script setup>
+    const newCollection = [
+        {
+            title: "SoRich Produkt 1",
+            price: "1999",
+            url: "/images/product.webp",
+        },
+        {
+            title: "SoRich Produkt 2",
+            price: "1999",
+            url: "/images/product.webp",
+        },
+        {
+            title: "SoRich Produkt 3",
+            price: "1999",
+            url: "/images/product.webp",
+        },
+    ];
+</script>
+
 <style scoped>
-    .hero {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+    .new {
         position: relative;
-        padding: calc(5rem + 2rem) 10% 4rem 10%;
-        background-image: url("/images/hero.webp");
-        background-size: cover;
-        background-position: top;
+        margin: 4rem 0;
+        padding: 0 10%;
     }
 
-    .hero::after {
+    .new::after {
         --step: 2%;
         --thickness: 1px;
         --color: white;
@@ -36,54 +72,66 @@
         top: 2.5rem;
         left: var(--step);
         z-index: 1;
-        
+        pointer-events: none;
         border: var(--thickness) solid var(--color);
         border-top: var(--thickness) solid #0000;
         background:
-            conic-gradient(from 90deg  at top    var(--thickness) left  var(--thickness),var(--_g)) 0    0    / var(--_p),
-            conic-gradient(from 180deg at top    var(--thickness) right var(--thickness),var(--_g)) 100% 0    / var(--_p),
-            conic-gradient(from 0deg   at bottom var(--thickness) left  var(--thickness),var(--_g)) 0    100% / var(--_p),
-            conic-gradient(from -90deg at bottom var(--thickness) right var(--thickness),var(--_g)) 100% 100% / var(--_p);
+            conic-gradient(from 90deg  at top var(--thickness) left  var(--thickness), var(--_g)) 0    0 / var(--_p),
+            conic-gradient(from 180deg at top var(--thickness) right var(--thickness), var(--_g)) 100% 0 / var(--_p);
     }
 
-    .hero-imgs {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 2rem;
+    .new-heading {
+        text-align: center;
+        font-family: var(--black-font-family);
+        font-size: 4rem;
     }
 
-    .hero-img {
-        width: 12rem;
-        height: 12rem;
+    .new-swiper {
+        padding: 4rem 0 8rem 0;
+    }
+    
+    .product {
+        aspect-ratio: 1/1;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+        padding: 1rem;
+        position: relative;
+        margin: 0 2rem;
+        color: black;
+        background-color: white;
+        z-index: -1;
+    }
+
+    .product-img {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
         object-fit: cover;
         object-position: center;
-        box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.50), 0px 4px 20px 0px rgba(0, 0, 0, 0.25) inset;
+        z-index: -1;
     }
 
-    .hero-heading {
-        font-size: 8rem;
-        font-family: var(--black-font-family);
-        text-shadow: 0px 4px 20px rgba(0, 0, 0, 0.50);
+    .product-title, .product-price {
+        font-family: var(--default-condensed-font-family);
+        text-shadow: 0px -2px 4px white;
     }
 
-    @media only screen and (max-width: 768px) {
-        .hero {
-            justify-content: center;
-        }
-        
-        .hero-imgs {
-            display: none;
-        }
+    .product-title {
+        font-size: 2.5rem;
+        font-weight: bold;
     }
 
-    @media only screen and (max-width: 1024px) {
-        .hero-img {
-            width: 8rem;
-            height: 8rem;
-        }
+    .product-price {
+        font-size: 2rem;
+        font-weight: 500;
+        color: var(--color-primary);
+    }
 
-        .hero-heading {
-            font-size: 6rem;
-        }
+    .product-price::before {
+        content: "€ ";
     }
 </style>
