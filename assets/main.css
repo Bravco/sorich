@@ -4,6 +4,8 @@
     --black-font-family: 'Archivo Black', sans-serif;
     --default-font-family: 'Barlow', sans-serif;
     --default-condensed-font-family: 'Barlow Condensed', sans-serif;
+
+    --color-text: white;
 }
 
 * {
@@ -11,6 +13,11 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+body {
+    color: var(--color-text);
+    background: linear-gradient(180deg, #262328 0%, #50414F 0.01%, #000 100%);
 }
 
 li {

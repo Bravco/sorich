@@ -64,7 +64,6 @@
         font-size: 8rem;
         font-family: var(--black-font-family);
         text-shadow: 0px 4px 20px rgba(0, 0, 0, 0.50);
-        color: white;
     }
 
     @media only screen and (max-width: 768px) {

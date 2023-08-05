@@ -147,7 +147,6 @@
         position: fixed;
         padding: 1rem 10%;
         z-index: 100;
-        color: white;
         transition-property: background-colorm backdrop-filter;
         transition-duration: 300ms;
     }
@@ -212,7 +211,6 @@
     footer {
         flex-direction: column;
         padding: 0 10%;
-        color: white;
         background-color: black;
     }
 
