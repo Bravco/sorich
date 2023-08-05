@@ -23,7 +23,7 @@
 
     .hero::after {
         --step: 2%;
-        --thickness: 2px;
+        --thickness: 1px;
         --color: white;
         --offset: 5%;
         --_g: #0000 90deg,var(--color) 0;
