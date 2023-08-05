@@ -61,7 +61,7 @@
         --step: 2%;
         --thickness: 1px;
         --color: white;
-        --offset: 5%;
+        --offset: 20%;
         --_g: #0000 90deg,var(--color) 0;
         --_p: var(--offset) var(--offset) border-box no-repeat;
 
@@ -133,5 +133,44 @@
 
     .product-price::before {
         content: "€ ";
+    }
+
+    @media only screen and (max-width: 1024px) {
+        .new::after {
+            --offset: 15%;
+            top: 2rem;
+        }
+
+        .new-heading {
+            font-size: 3rem;
+        }
+
+        .new-swiper {
+            padding: 3rem 0 6rem 0;
+        }
+    }
+
+    @media only screen and (max-width: 768px) {
+        .new::after {
+            --offset: 15%;
+            top: 1.5rem;
+        }
+
+        .new-heading {
+            font-size: 2rem;
+        }
+
+        .new-swiper {
+            padding: 2rem 0 6rem 0;
+        }
+
+        .product-title {
+            white-space: nowrap;
+            font-size: 2rem;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+        }
     }
 </style>
