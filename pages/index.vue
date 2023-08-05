@@ -21,7 +21,7 @@
                 <SwiperSlide v-for="(item, index) in newCollection" :key="index">
                     <div class="product">
                         <nuxt-img class="product-img" :src="item.url" alt="product-image"/>
-                        <span class="new-product-title">{{ item.title }}</span>
+                        <span class="product-title">{{ item.title }}</span>
                         <span class="product-price">{{ (item.price/100).toFixed(2) }}</span>
                     </div>
                 </SwiperSlide>
