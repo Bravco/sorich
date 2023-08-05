@@ -9,7 +9,24 @@
                             <NuxtLink class="nav-link" to="/">Domov</NuxtLink>
                         </li>
                         <li class="nav-item">
-                            <NuxtLink class="nav-link" to="/">Obchod</NuxtLink>
+                            <NuxtLink class="nav-link" to="/">
+                                Obchod
+                                <Icon class="nav-dropdown-indicator" name="mdi:chevron-down" size="1.5rem"/>
+                            </NuxtLink>
+                            <ul class="nav-dropdown">
+                                <li class="nav-dropdown-item">
+                                    <NuxtLink class="nav-link" to="/">Tričká</NuxtLink>
+                                </li>
+                                <li class="nav-dropdown-item">
+                                    <NuxtLink class="nav-link" to="/">Mikiny</NuxtLink>
+                                </li>
+                                <li class="nav-dropdown-item">
+                                    <NuxtLink class="nav-link" to="/">Nohavice</NuxtLink>
+                                </li>
+                                <li class="nav-dropdown-item">
+                                    <NuxtLink class="nav-link" to="/">Doplnky</NuxtLink>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                 </div>
@@ -109,9 +126,39 @@
         gap: 2rem;
     }
 
+    .nav-item {
+        position: relative;
+    }
+
     .nav-link {
         font-size: 1.125rem;
         font-weight: 500;
+    }
+
+    .nav-dropdown-indicator {
+        transition: rotate 300ms;
+    }
+
+    .nav-item:has(.nav-dropdown-indicator):hover .nav-dropdown-indicator {
+        rotate: -180deg;
+    }
+
+    .nav-dropdown {
+        width: 8rem;
+        min-width: fit-content;
+        display: none;
+        flex-direction: column;
+        gap: .5rem;
+        position: absolute;
+        padding: 1rem;
+        z-index: 1;
+        overflow: hidden;
+        background-color: white;
+        box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, .1);
+    }
+
+    .nav-item:has(.nav-dropdown):hover .nav-dropdown {
+        display: flex;
     }
 
     .nav-right {
