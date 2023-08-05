@@ -1,7 +1,7 @@
 <template>
     <div>
         <header>
-            <nav>
+            <nav :class="{ 'scrolled': scrolled }">
                 <div class="nav-left">
                     <Logo/>
                     <ul class="nav-list">
@@ -101,6 +101,22 @@
     </div>
 </template>
 
+<script setup>
+    const scrolled = ref(false);
+
+    onMounted(() => {
+        if (process.client) {
+            window.addEventListener("scroll", () => {
+                if (window.scrollY > 0) {
+                    scrolled.value = true;
+                } else {
+                    scrolled.value = false;
+                }
+            });
+        }
+    });
+</script>
+
 <style scoped>
     main {
         min-height: 100svh;
@@ -116,6 +132,15 @@
         justify-content: space-between;
         position: fixed;
         padding: 1rem 10%;
+        z-index: 100;
+        color: white;
+        transition-property: background-colorm backdrop-filter;
+        transition-duration: 300ms;
+    }
+
+    nav.scrolled {
+        background-color: rgba(0, 0, 0, .1);
+        backdrop-filter: blur(1rem);
     }
 
     .nav-left {
@@ -153,6 +178,7 @@
         padding: 1rem;
         z-index: 1;
         overflow: hidden;
+        color: black;
         background-color: white;
         box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, .1);
     }
