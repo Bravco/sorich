@@ -8,6 +8,7 @@ export default defineNuxtConfig({
   ],
   css: [
     "@/assets/main.css",
+    "@/assets/swiperSlide.css",
   ],
   app: {
     pageTransition: {

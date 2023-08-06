@@ -1,0 +1,56 @@
+.swiper-product {
+    aspect-ratio: 1/1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 1rem;
+    position: relative;
+    
+    color: black;
+    background-color: white;
+    z-index: -1;
+}
+
+.swiper-product-img {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    object-fit: cover;
+    object-position: center;
+    z-index: -1;
+}
+
+.swiper-product-title, .swiper-product-price {
+    font-family: var(--default-condensed-font-family);
+    text-shadow: 0px -2px 4px white;
+}
+
+.swiper-product-title {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.swiper-product-price {
+    font-size: 2rem;
+    font-weight: 500;
+    color: var(--color-primary);
+}
+
+.swiper-product-price::before {
+    content: "€ ";
+}
+
+@media only screen and (max-width: 768px) {
+    .swiper-product-title {
+        white-space: nowrap;
+        font-size: 2rem;
+    }
+
+    .swiper-product-price {
+        font-size: 1.5rem;
+    }
+}
