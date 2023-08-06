@@ -3,6 +3,7 @@
         <HomeHero/>
         <HomeNew :products="dummyProducts"/>
         <HomeDiscount :products="dummyProducts"/>
+        <HomeOrderProcess/>
     </div>
 </template>
 
