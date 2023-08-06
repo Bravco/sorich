@@ -315,6 +315,10 @@
             padding-top: 2rem;
         }
 
+        .nav-dropdown .nav-link {
+            color: white;
+        }
+
         .mobile-nav-btn {
             display: unset;
         }
