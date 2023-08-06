@@ -5,22 +5,25 @@
                 <li class="order-process-item">
                     <span class="order-process-item-index">1</span>
                     <nuxt-img class="order-process-item-img" src="/images/payment.webp" alt="payment"/>
+                    <h3 class="order-process-item-heading">Platba</h3>
                     <p class="order-process-item-paragraph">
-                        Nejaké informácia ohľadom <span>objednávky</span>, neviem čo tu mám napísať.
+                        Umožnujeme platbu kartou, dobierkou alebo priamo bankovým prevodom.
                     </p>
                 </li>
                 <li class="order-process-item">
                     <span class="order-process-item-index">2</span>
                     <nuxt-img class="order-process-item-img" src="/images/delivery.webp" alt="delivery"/>
+                    <h3 class="order-process-item-heading">Donáška</h3>
                     <p class="order-process-item-paragraph">
-                        Nejaké informácia ohľadom <span>donášky</span>, neviem čo tu mám napísať.
+                        Dodanie nášho tovaru trvá menej ako týždeň a to počas pracovných dní.
                     </p>
                 </li>
                 <li class="order-process-item">
                     <span class="order-process-item-index">3</span>
                     <nuxt-img class="order-process-item-img" src="/images/box.webp" alt="acceptance"/>
+                    <h3 class="order-process-item-heading">Reklamácia</h3>
                     <p class="order-process-item-paragraph">
-                        Nejaké informácia ohľadom <span>prevzatia</span>, neviem čo tu mám napísať.
+                        Zákazníci u nás majú istotu s našim jednoduchým procesom reklamácie.
                     </p>
                 </li>
             </ul>
@@ -34,8 +37,8 @@
     }
 
     .order-process-list {
-        display: flex;
-        justify-content: center;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
         gap: 8rem;
         position: relative;
     }
@@ -55,7 +58,6 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 2rem;
     }
 
     .order-process-item-index {
@@ -74,19 +76,21 @@
         height: 6rem;
     }
 
-    .order-process-item-paragraph {
-        font-size: 1.25rem;
+    .order-process-item-heading {
+        margin: 2rem 0 1rem 0;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: var(--color-primary);
     }
 
-    .order-process-item-paragraph span {
-        font-weight: 500;
-        color: var(--color-primary);
+    .order-process-item-paragraph {
+        text-align: center;
+        font-size: 1.25rem;
     }
 
     @media only screen and (max-width: 768px) {
         .order-process-list {
-            flex-direction: column;
-            align-items: center;
+            grid-template-columns: 1fr;
         }
 
         .order-process-list::before {
