@@ -9,22 +9,22 @@
                             <NuxtLink class="nav-link" to="/">Domov</NuxtLink>
                         </li>
                         <li class="nav-item">
-                            <NuxtLink class="nav-link" to="/">
+                            <NuxtLink class="nav-link" to="/obchod">
                                 Obchod
                                 <Icon class="nav-dropdown-indicator" name="mdi:chevron-down" size="1.5rem"/>
                             </NuxtLink>
                             <ul class="nav-dropdown">
                                 <li>
-                                    <NuxtLink class="nav-link" to="/">Tričká</NuxtLink>
+                                    <NuxtLink class="nav-link" to="/obchod">Tričká</NuxtLink>
                                 </li>
                                 <li>
-                                    <NuxtLink class="nav-link" to="/">Mikiny</NuxtLink>
+                                    <NuxtLink class="nav-link" to="/obchod">Mikiny</NuxtLink>
                                 </li>
                                 <li>
-                                    <NuxtLink class="nav-link" to="/">Nohavice</NuxtLink>
+                                    <NuxtLink class="nav-link" to="/obchod">Nohavice</NuxtLink>
                                 </li>
                                 <li>
-                                    <NuxtLink class="nav-link" to="/">Doplnky</NuxtLink>
+                                    <NuxtLink class="nav-link" to="/obchod">Doplnky</NuxtLink>
                                 </li>
                             </ul>
                         </li>
@@ -174,6 +174,7 @@
     }
 
     .nav-dropdown-indicator {
+        position: absolute;
         transition: rotate 300ms;
     }
 
