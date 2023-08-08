@@ -2,6 +2,7 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: [
+    "nuxt-medusa",
     "nuxt-icon",
     "@nuxt/image",
     "@invictus.codes/nuxt-vuetify",
