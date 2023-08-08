@@ -63,6 +63,8 @@
 <style scoped>
     .main-wrapper {
         display: grid;
+        -webkit-box-align: start;
+        align-items: start;
         grid-template-columns: auto 1fr;
         gap: 2rem;
         padding: 4rem 10%;
@@ -72,7 +74,11 @@
         display: grid;
         grid-template-rows: 4rem auto;
         gap: 1rem;
-        
+    }
+
+    .categories-wrapper {
+        position: sticky;
+        top: 6rem;
     }
 
     .category-heading {
@@ -157,6 +163,10 @@
 
         .categories-wrapper, .products-wrapper {
             grid-template-rows: unset;
+        }
+
+        .categories-wrapper {
+            position: static;
         }
 
         .category-list {
