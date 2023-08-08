@@ -14,17 +14,8 @@
                                 <Icon class="nav-dropdown-indicator" name="mdi:chevron-down" size="1.5rem"/>
                             </NuxtLink>
                             <ul class="nav-dropdown">
-                                <li>
-                                    <NuxtLink class="nav-link" to="/obchod">Tričká</NuxtLink>
-                                </li>
-                                <li>
-                                    <NuxtLink class="nav-link" to="/obchod">Mikiny</NuxtLink>
-                                </li>
-                                <li>
-                                    <NuxtLink class="nav-link" to="/obchod">Nohavice</NuxtLink>
-                                </li>
-                                <li>
-                                    <NuxtLink class="nav-link" to="/obchod">Doplnky</NuxtLink>
+                                <li v-for="category in product_categories" :key="category.id">
+                                    <NuxtLink class="nav-link" :to="`/obchod?category_id=${category.id}`">{{ category.name }}</NuxtLink>
                                 </li>
                             </ul>
                         </li>
@@ -106,6 +97,9 @@
 
 <script setup>
     const { afterEach } = useRouter();
+    const medusaClient = useMedusaClient();
+
+    const { product_categories } = await medusaClient.productCategories.list();
 
     const scrolled = ref(false);
     const isMobileMenuActive = ref(false);

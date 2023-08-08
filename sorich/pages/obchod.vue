@@ -4,26 +4,19 @@
         <section class="main-wrapper">
             <div class="categories-wrapper">
                 <h3 class="category-heading">Kategórie</h3>
-                <ul class="category-list">
-                    <li class="category-item">
-                        <NuxtLink to="/obchod">Všetky</NuxtLink>
-                    </li>
-                    <li class="category-item">
-                        <NuxtLink to="/obchod">Tričká</NuxtLink>
-                    </li>
-                    <li class="category-item">
-                        <NuxtLink to="/obchod">Tričká</NuxtLink>
-                    </li>
-                    <li class="category-item">
-                        <NuxtLink to="/obchod">Nohavice</NuxtLink>
-                    </li>
-                    <li class="category-item">
-                        <NuxtLink to="/obchod">Doplnky</NuxtLink>
-                    </li>
-                    <li class="category-item">
-                        <NuxtLink to="/obchod">Nezaradené</NuxtLink>
-                    </li>
-                </ul>
+                <div class="category-list">
+                    <button
+                    :class="['category-btn', { active: selectedCategoryId === null }]"
+                        @click.prevent="selectCategory()" 
+                        aria-label="Select all"
+                    >Všetky</button>
+                    <button
+                        v-for="category in product_categories" :key="category.id"
+                        @click.prevent="selectCategory(category.id)"
+                        :class="['category-btn', { active: selectedCategoryId === category.id }]"
+                        :aria-label="`Select ${category.name}`"
+                    >{{ category.name }}</button>
+                </div>
             </div>
             <div class="products-wrapper">
                 <div class="products-header">
@@ -41,12 +34,15 @@
                     ></v-select>
                 </div>
                 <ul class="product-list">
-                    <li v-for="_ in 10">
+                    <li v-for="product in products" :key="product.id">
                         <NuxtLink to="/obchod">
-                            <nuxt-img class="product-img" src="/images/product.webp" alt="product-image"/>
+                            <nuxt-img class="product-img" :src="product.thumbnail" alt="product-image"/>
                             <div class="product-description">
-                                <h4 class="product-title">Product title</h4>
-                                <span class="product-price">€ 99.99</span>
+                                <h4 class="product-title">{{ product.title }}</h4>
+                                <span class="product-price">
+                                    {{ product.variants[0] ? (product.variants[0].prices[0].amount/100).toFixed(2) : "" }}
+                                    {{ product.variants[0] ? product.variants[0].prices[0].currency_code.toUpperCase() : "" }}
+                                </span>
                             </div>
                         </NuxtLink>
                     </li>
@@ -57,7 +53,36 @@
 </template>
 
 <script setup>
-    const searchQuery = ref("");
+    const { category_id: queryCategoryId } = useRoute().query;
+    const medusaClient = useMedusaClient();
+    
+    const { product_categories } = await medusaClient.productCategories.list();
+
+    const products = ref(null);
+    const searchQuery = ref(null);
+    const selectedCategoryId = ref(null);
+
+    assignProducts(queryCategoryId);
+
+    async function selectCategory(id = null) {
+        if (selectedCategoryId.value !== id) {
+            assignProducts(id);
+        }
+    }
+
+    async function assignProducts(categoryId) {
+        selectedCategoryId.value = categoryId === undefined
+            ? null
+            : categoryId;
+
+        const { products: categoryProducts } = (categoryId === null | categoryId === undefined )
+            ? await medusaClient.products.list()
+            : await medusaClient.products.list({ category_id: [categoryId] });
+        
+        if (JSON.stringify(products.value) !== JSON.stringify(categoryProducts))  {
+            products.value = categoryProducts;
+        }
+    }
 </script>
 
 <style scoped>
@@ -92,8 +117,13 @@
         gap: .5rem;
     }
 
-    .category-item {
+    .category-btn {
+        text-align: start;
         font-size: 1.125rem;
+    }
+
+    .category-btn.active {
+        color: var(--color-primary);
     }
 
     .products-header {
@@ -111,8 +141,8 @@
         justify-content: space-between;
         gap: .5rem;
         padding: .5rem 1rem;
-        border: 2px solid var(--color-text);
-        border-radius: 2rem;
+        border: 1px solid var(--color-text);
+        border-radius: .5rem;
     }
 
     .search-box input {
@@ -126,12 +156,13 @@
 
     .product-list {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr));
+        grid-template-columns: repeat(3, 1fr);
         gap: 1.5rem;
     }
-
+    
     .product-img {
         width: 100%;
+        aspect-ratio: 1/1;
         object-fit: cover;
         object-position: center;
     }
@@ -153,6 +184,18 @@
         font-size: 2rem;
         font-weight: bold;
         color: var(--color-primary);
+    }
+
+    @media only screen and (max-width: 1480px) {
+        .product-list {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media only screen and (max-width: 1024px) {
+        .product-list {
+            grid-template-columns: 1fr;
+        }
     }
 
     @media only screen and (max-width: 768px) {
