@@ -2,7 +2,7 @@
     <div>
         <HomeHero/>
         <HomeNew :products="dummyProducts"/>
-        <HomeDiscount :products="dummyProducts"/>
+        <Discounts/>
         <HomeOrderProcess/>
     </div>
 </template>

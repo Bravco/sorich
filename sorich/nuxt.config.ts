@@ -4,6 +4,7 @@ export default defineNuxtConfig({
   modules: [
     "nuxt-icon",
     "@nuxt/image",
+    "@invictus.codes/nuxt-vuetify",
     "nuxt-swiper",
   ],
   css: [

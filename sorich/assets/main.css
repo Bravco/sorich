@@ -20,7 +20,7 @@
 
 body {
     color: var(--color-text);
-    background: linear-gradient(180deg, #262328 0%, #50414F 0.01%, #000 100%);
+    background: linear-gradient(180deg, #262328 0%, #312a30 0.01%, #131313 100%);
 }
 
 li {
@@ -43,4 +43,12 @@ button {
 
 a:hover, button:hover {
     filter: opacity(50%);
+}
+
+input {
+    outline: none;
+    border: none;
+    font-size: inherit;
+    color: var(--color-text);
+    background: none;
 }

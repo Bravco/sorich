@@ -24,11 +24,11 @@
                     pauseOnMouseEnter: true,
                 }"
             >
-                <SwiperSlide v-for="product in props.products" :key="product.id">
+                <SwiperSlide v-for="product in products" :key="product.id">
                     <div class="swiper-product">
                         <nuxt-img class="swiper-product-img" :src="product.url" alt="product-image"/>
                         <span class="swiper-product-title">{{ product.title }}</span>
-                        <span class="swiper-product-price">{{ (product.price/100).toFixed(2) }}</span>
+                        <span class="swiper-product-price">€ {{ (product.price/100).toFixed(2) }}</span>
                     </div>
                 </SwiperSlide>
             </Swiper>
@@ -37,12 +37,26 @@
 </template>
 
 <script setup>
-    const props = defineProps({
-        products: {
-            type: Array,
-            required: true,
+    const products = [
+        {
+            id: 0,
+            title: "SoRich Produkt 1",
+            price: "1999",
+            url: "/images/product.webp",
         },
-    });
+        {
+            id: 1,
+            title: "SoRich Produkt 2",
+            price: "1999",
+            url: "/images/product.webp",
+        },
+        {
+            id: 2,
+            title: "SoRich Produkt 3",
+            price: "1999",
+            url: "/images/product.webp",
+        },
+    ];
 </script>
 
 <style scoped>

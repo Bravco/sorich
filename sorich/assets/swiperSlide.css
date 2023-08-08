@@ -40,10 +40,6 @@
     color: var(--color-primary);
 }
 
-.swiper-product-price::before {
-    content: "€ ";
-}
-
 @media only screen and (max-width: 768px) {
     .swiper-product-title {
         white-space: nowrap;
