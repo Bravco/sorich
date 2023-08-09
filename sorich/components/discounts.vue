@@ -61,32 +61,38 @@
 
 <style scoped>
     .discount {
-        display: flex;
-        align-items: center;
+        position: relative;
         padding: 8rem 10% 8rem 0;
         background: linear-gradient(166deg, #B92323 0%, #521111 100%);
     }
 
     .discount-heading {
+        position: absolute;
+        top: 50%;
+        translate: 0 -50%;
         font-family: var(--black-font-family);
         font-size: 8rem;
         rotate: -90deg;
     }
 
+    .discount-swiper {
+        margin-left: 25%;
+    }
+
     @media only screen and (max-width: 1480px) {
         .discount {
-            display: block;
-            padding: 4rem 10%;
+            padding: 6rem 10%;
         }
 
         .discount-heading {
+            position: static;
             text-align: center;
             rotate: unset;
             font-size: 6rem;
         }
 
         .discount-swiper {
-            padding: 2rem 0;
+            margin-left: unset;
         }
     }
 
