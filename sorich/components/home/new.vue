@@ -42,8 +42,12 @@
 <script setup>
     const medusaClient = useMedusaClient();
 
+    const { collections } = await medusaClient.collections.list({
+        handle: ["nova-kolekcia"],
+    });
+
     const { products } = await medusaClient.products.list({
-        collection_id: ["pcol_01H7DGR7MDG62GQQZZXB09JPJ5"],
+        collection_id: [collections[0].id],
     });
 </script>
 
