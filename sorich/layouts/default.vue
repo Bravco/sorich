@@ -9,13 +9,13 @@
                             <NuxtLink class="nav-link" to="/">Domov</NuxtLink>
                         </li>
                         <li class="nav-item">
-                            <NuxtLink class="nav-link" to="/obchod">
+                            <NuxtLink class="nav-link" to="/products">
                                 Obchod
                                 <Icon class="nav-dropdown-indicator" name="mdi:chevron-down" size="1.5rem"/>
                             </NuxtLink>
                             <ul class="nav-dropdown">
                                 <li v-for="category in product_categories" :key="category.id">
-                                    <NuxtLink class="nav-link" :to="`/obchod?category_id=${category.id}`">{{ category.name }}</NuxtLink>
+                                    <NuxtLink class="nav-link" :to="`/products?category_id=${category.id}`">{{ category.name }}</NuxtLink>
                                 </li>
                             </ul>
                         </li>
