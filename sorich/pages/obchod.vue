@@ -25,6 +25,7 @@
                         <input v-model="searchQuery" type="text" placeholder="Vyhľadaj pordukt...">
                     </div>
                     <v-select
+                        v-model="orderBy"
                         class="sortby"
                         label="Zoradiť podľa"
                         :items="['ceny (zostupne)', 'ceny (vzostupne)']"
@@ -34,7 +35,7 @@
                     ></v-select>
                 </div>
                 <ul class="product-list">
-                    <li v-for="product in products" :key="product.id">
+                    <li v-for="product in queryProducts" :key="product.id">
                         <NuxtLink to="/obchod">
                             <nuxt-img class="product-img" :src="product.thumbnail" alt="product-image"/>
                             <div class="product-description">
@@ -59,10 +60,39 @@
     const { product_categories } = await medusaClient.productCategories.list();
 
     const products = ref(null);
-    const searchQuery = ref(null);
     const selectedCategoryId = ref(null);
+    const searchQuery = ref(null);
+    const orderBy = ref(null);
 
     assignProducts(queryCategoryId);
+
+    const sortedProducts = computed(() => {
+        if (products.value === null) {
+            return null;
+        }
+
+        switch (orderBy.value) {
+            case "ceny (zostupne)":
+                return [...products.value].sort((a, b) => a.variants[0].prices[0].amount - b.variants[0].prices[0].amount);
+        
+            case "ceny (vzostupne)":
+                return [...products.value].sort((a, b) => a.variants[0].prices[0].amount - b.variants[0].prices[0].amount).reverse();
+            
+            default:
+                return products.value;
+        }
+    });
+
+    const queryProducts = computed(() => {
+        if (sortedProducts.value === null) {
+            return null;
+        }
+
+        return sortedProducts.value.filter((product) => 
+            product.title.toLowerCase()
+                .includes(typeof searchQuery.value === "string" ? searchQuery.value.toLowerCase() : "")
+        );
+    });
 
     async function selectCategory(id = null) {
         if (selectedCategoryId.value !== id) {
