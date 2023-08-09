@@ -24,11 +24,14 @@
                     pauseOnMouseEnter: true,
                 }"
             >
-                <SwiperSlide v-for="product in props.products" :key="product.id">
+                <SwiperSlide v-for="product in products" :key="product.id">
                     <div class="swiper-product">
-                        <nuxt-img class="swiper-product-img" :src="product.url" alt="product-image"/>
+                        <nuxt-img class="swiper-product-img" :src="product.thumbnail" alt="product-image"/>
                         <span class="swiper-product-title">{{ product.title }}</span>
-                        <span class="swiper-product-price">{{ (product.price/100).toFixed(2) }} EUR</span>
+                        <span class="swiper-product-price">
+                            {{ product.variants[0] ? (product.variants[0].prices[0].amount/100).toFixed(2) : "" }}
+                            {{ product.variants[0] ? product.variants[0].prices[0].currency_code.toUpperCase() : "" }}
+                        </span>
                     </div>
                 </SwiperSlide>
             </Swiper>
@@ -37,11 +40,10 @@
 </template>
 
 <script setup>
-    const props = defineProps({
-        products: {
-            type: Array,
-            required: true,
-        },
+    const medusaClient = useMedusaClient();
+
+    const { products } = await medusaClient.products.list({
+        collection_id: ["pcol_01H7DGR7MDG62GQQZZXB09JPJ5"],
     });
 </script>
 

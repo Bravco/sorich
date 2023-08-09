@@ -6,7 +6,7 @@
     align-items: center;
     padding: 1rem;
     position: relative;
-    
+    line-height: 2.5rem;
     color: black;
     background-color: white;
     z-index: -1;
