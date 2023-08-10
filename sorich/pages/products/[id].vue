@@ -22,6 +22,7 @@
                         :key="image.id"
                         :src="image.url"
                         cover
+                        height="100%"
                     ></v-carousel-item>
                 </v-carousel>
             </div>
