@@ -44,7 +44,11 @@
                     {{ product.variants[0] ? (product.variants[0].prices[0].amount/100).toFixed(2) : "" }}
                     {{ product.variants[0] ? product.variants[0].prices[0].currency_code.toUpperCase() : "" }}
                 </span>
-                <button class="add-to-cart-btn" :aria-label="`Add ${product.title} to cart`">Pridať do košíka</button>
+                <button 
+                    class="add-to-cart-btn" 
+                    :disabled="Object.keys(selectedOptions).length < 2" 
+                    :aria-label="`Add ${product.title} to cart`"
+                >Pridať do košíka</button>
             </div>
         </section>
     </div>
@@ -152,6 +156,12 @@
         filter: none;
         border-color: var(--color-primary);
         background-color: var(--color-primary);
+    }
+
+    .add-to-cart-btn:disabled,
+    .add-to-cart-btn[disabled] {
+        pointer-events: none;
+        filter: opacity(.5);
     }
 
     @media only screen and (max-width: 1280px) {
