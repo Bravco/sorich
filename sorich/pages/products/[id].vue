@@ -47,7 +47,7 @@
                 </span>
                 <button 
                     class="add-to-cart-btn" 
-                    :disabled="Object.keys(selectedOptions).length < 2" 
+                    :disabled="Object.keys(selectedOptions).length < options.length" 
                     :aria-label="`Add ${product.title} to cart`"
                 >Pridať do košíka</button>
             </div>
