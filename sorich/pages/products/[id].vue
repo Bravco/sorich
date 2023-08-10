@@ -125,4 +125,27 @@
         border-color: var(--color-primary);
         background-color: var(--color-primary);
     }
+
+    @media only screen and (max-width: 1280px) {
+        .imgs-wrapper {
+            grid-template-columns: 1fr;
+        }
+
+        .img-options {
+            flex-direction: row;
+            flex-wrap: wrap;
+            order: 1;
+        }
+    }
+
+    @media only screen and (max-width: 1024px) {
+        .main-wrapper {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .return-link {
+            grid-column: auto;
+        }
+    }
 </style>
