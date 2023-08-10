@@ -33,7 +33,7 @@
                 <v-radio-group 
                     v-for="option in options" 
                     :key="option" 
-                    :model-value="option.values[0]"
+                    v-model="selectedOptions[option.title]"
                     :label="option.title" 
                     inline
                     class="option-radio-group"
@@ -57,6 +57,7 @@
     const { product } = await medusaClient.products.retrieve(productId);
 
     const carouselIndex = ref(0);
+    const selectedOptions = ref({});
 
     const options = computed(() => {
         return product.options.map(option => {
