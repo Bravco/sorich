@@ -30,6 +30,16 @@
                     <h1 class="product-title">{{ product.title }}</h1>
                     <p class="product-description">{{ product.description }}</p>
                 </div>
+                <v-radio-group 
+                    v-for="option in options" 
+                    :key="option" 
+                    :model-value="option.values[0]"
+                    :label="option.title" 
+                    inline
+                    class="option-radio-group"
+                >
+                    <v-radio v-for="value in option.values" :key="value" :label="value" :value="value"/>
+                </v-radio-group>
                 <span class="product-price">
                     {{ product.variants[0] ? (product.variants[0].prices[0].amount/100).toFixed(2) : "" }}
                     {{ product.variants[0] ? product.variants[0].prices[0].currency_code.toUpperCase() : "" }}
@@ -47,6 +57,19 @@
     const { product } = await medusaClient.products.retrieve(productId);
 
     const carouselIndex = ref(0);
+
+    const options = computed(() => {
+        return product.options.map(option => {
+            const values = option.values
+                .map(valueObj => valueObj.value)
+                .filter((value, index, self) => self.indexOf(value) === index);
+
+            return {
+                title: option.title,
+                values: values,
+            };
+        });
+    });
 </script>
 
 <style scoped>
@@ -101,6 +124,10 @@
 
     .product-description {
         font-size: 1.125rem;
+    }
+
+    .option-radio-group {
+        flex: none;
     }
 
     .product-price {

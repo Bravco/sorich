@@ -25,14 +25,14 @@
                 }"
             >
                 <SwiperSlide v-for="product in products" :key="product.id">
-                    <div class="swiper-product">
+                    <NuxtLink class="swiper-product" :to="`/products/${product.id}`">
                         <nuxt-img class="swiper-product-img" :src="product.thumbnail" alt="product-image"/>
                         <span class="swiper-product-title">{{ product.title }}</span>
                         <span class="swiper-product-price">
                             {{ product.variants[0] ? (product.variants[0].prices[0].amount/100).toFixed(2) : "" }}
                             {{ product.variants[0] ? product.variants[0].prices[0].currency_code.toUpperCase() : "" }}
                         </span>
-                    </div>
+                    </NuxtLink>
                 </SwiperSlide>
             </Swiper>
         </section>
