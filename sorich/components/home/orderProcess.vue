@@ -4,7 +4,7 @@
             <ul class="order-process-list">
                 <li class="order-process-item">
                     <span class="order-process-item-index">1</span>
-                    <nuxt-img class="order-process-item-img" src="/images/payment.webp" alt="payment"/>
+                    <nuxt-img class="order-process-item-img" src="/images/payment.webp" loading="lazy" alt="payment"/>
                     <h3 class="order-process-item-heading">Platba</h3>
                     <p class="order-process-item-paragraph">
                         Umožnujeme platbu kartou, dobierkou alebo priamo bankovým prevodom.
@@ -12,7 +12,7 @@
                 </li>
                 <li class="order-process-item">
                     <span class="order-process-item-index">2</span>
-                    <nuxt-img class="order-process-item-img" src="/images/delivery.webp" alt="delivery"/>
+                    <nuxt-img class="order-process-item-img" src="/images/delivery.webp" loading="lazy" alt="delivery"/>
                     <h3 class="order-process-item-heading">Donáška</h3>
                     <p class="order-process-item-paragraph">
                         Dodanie nášho tovaru trvá menej ako týždeň a to počas pracovných dní.
