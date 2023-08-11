@@ -27,8 +27,8 @@
                 <SwiperSlide v-for="product in products" :key="product.id">
                     <div class="swiper-product">
                         <nuxt-img class="swiper-product-img" :src="product.url" alt="product-image"/>
-                        <span class="swiper-product-title">{{ product.title }}</span>
-                        <span class="swiper-product-price">{{ (product.price/100).toFixed(2) }} EUR</span>
+                        <p class="swiper-product-title">{{ product.title }}</p>
+                        <p class="swiper-product-price">{{ (product.price/100).toFixed(2) }} EUR</p>
                     </div>
                 </SwiperSlide>
             </Swiper>

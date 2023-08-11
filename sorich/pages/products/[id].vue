@@ -41,15 +41,18 @@
                 >
                     <v-radio v-for="value in option.values" :key="value" :label="value" :value="value"/>
                 </v-radio-group>
-                <span class="product-price">
+                <p class="product-price">
                     {{ product.variants[0] ? (product.variants[0].prices[0].amount/100).toFixed(2) : "" }}
                     {{ product.variants[0] ? product.variants[0].prices[0].currency_code.toUpperCase() : "" }}
-                </span>
-                <button 
-                    class="add-to-cart-btn" 
-                    :disabled="Object.keys(selectedOptions).length < options.length" 
-                    :aria-label="`Add ${product.title} to cart`"
-                >Pridať do košíka</button>
+                </p>
+                <div class="product-actions">
+                    <Quantity v-model="quantity"/>
+                    <button 
+                        class="add-to-cart-btn" 
+                        :disabled="Object.keys(selectedOptions).length < options.length" 
+                        :aria-label="`Add ${product.title} to cart`"
+                    >Pridať do košíka</button>
+                </div>
             </div>
         </section>
     </div>
@@ -63,7 +66,8 @@
 
     const carouselIndex = ref(0);
     const selectedOptions = ref({});
-
+    const quantity = ref(1);
+    
     const options = computed(() => {
         return product.options.map(option => {
             const values = option.values
@@ -141,6 +145,12 @@
         font-size: 3rem;
         font-weight: bold;
         color: var(--color-primary);
+    }
+
+    .product-actions {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
     }
 
     .add-to-cart-btn {

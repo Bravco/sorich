@@ -40,10 +40,10 @@
                             <nuxt-img class="product-img" :src="product.thumbnail" loading="lazy" alt="product-image"/>
                             <div class="product-description">
                                 <h4 class="product-title">{{ product.title }}</h4>
-                                <span class="product-price">
+                                <p class="product-price">
                                     {{ product.variants[0] ? (product.variants[0].prices[0].amount/100).toFixed(2) : "" }}
                                     {{ product.variants[0] ? product.variants[0].prices[0].currency_code.toUpperCase() : "" }}
-                                </span>
+                                </p>
                             </div>
                         </NuxtLink>
                     </li>
