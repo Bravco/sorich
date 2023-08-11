@@ -50,7 +50,7 @@
                     <button 
                         class="add-to-cart-btn" 
                         :disabled="Object.keys(selectedOptions).length < options.length" 
-                        :aria-label="`Add ${product.title} to cart`"
+                        :aria-label="`Pridať ${product.title} do košíka`"
                     >Pridať do košíka</button>
                 </div>
             </div>

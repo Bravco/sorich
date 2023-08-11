@@ -1,11 +1,11 @@
 <template>
     <div>
         <div class="main">
-            <button @click.prevent="decrement" class="subtract-btn" aria-label="Decrease quantity">
+            <button @click.prevent="decrement" class="subtract-btn" aria-label="Zmenšiť počet">
                 <Icon name="mdi:minus"/>
             </button>
             <span class="value">{{ value }}</span>
-            <button @click.prevent="increment" class="add-btn" aria-label="Increase quantity">
+            <button @click.prevent="increment" class="add-btn" aria-label="Zväčšiť počet">
                 <Icon name="mdi:plus"/>
             </button>
         </div>
@@ -71,7 +71,7 @@
         align-items: center;
         justify-content: center;
         border-radius: .5rem;
-        background-color: rgba(0, 0, 0, .5);
+        background-color: rgba(0, 0, 0, .25);
     }
 
     .subtract-btn, .add-btn {

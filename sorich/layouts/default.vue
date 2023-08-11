@@ -29,7 +29,7 @@
                         <Icon name="mdi:cart-outline" size="1.5rem"/>
                         <span>00.00 €</span>
                     </NuxtLink>
-                    <button class="mobile-nav-btn" @click.prevent="toggleMobileNav" aria-label="Toggle mobile navigation">
+                    <button class="mobile-nav-btn" @click.prevent="toggleMobileNav" aria-label="Prepnúť mobilnú navigáciu">
                         <Icon name="heroicons:bars-2" size="2rem"/>
                     </button>
                 </div>

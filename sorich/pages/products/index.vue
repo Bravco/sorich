@@ -2,22 +2,22 @@
     <div>
         <Discounts/>
         <section class="main-wrapper">
-            <div class="categories-wrapper">
+            <aside class="categories-wrapper">
                 <h3 class="category-heading">Kategórie</h3>
                 <div class="category-list">
                     <button
                     :class="['category-btn', { active: selectedCategoryId === null }]"
                         @click.prevent="selectCategory()" 
-                        aria-label="Select all"
+                        aria-label="Vybrať všetko"
                     >Všetky</button>
                     <button
                         v-for="category in product_categories" :key="category.id"
                         @click.prevent="selectCategory(category.id)"
                         :class="['category-btn', { active: selectedCategoryId === category.id }]"
-                        :aria-label="`Select ${category.name}`"
+                        :aria-label="`Vybrať ${category.name}`"
                     >{{ category.name }}</button>
                 </div>
-            </div>
+            </aside>
             <div class="products-wrapper">
                 <div class="products-header">
                     <div class="search-box">
