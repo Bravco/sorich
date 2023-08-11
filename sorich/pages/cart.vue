@@ -31,6 +31,11 @@
             </div>
             <aside class="sidebar">
                 <div class="sidebar-box">
+                    <h1>Kupóny</h1>
+                    <input v-model="coupon" class="coupon-input" type="text" placeholder="Zadaj kód kupónu...">
+                    <button @click="applyCoupon" class="coupon-btn" aria-label="Aplikuj kupón">Aplikuj</button>
+                </div>
+                <div class="sidebar-box">
                     <h1>Zhrnutie objednávky</h1>
                     <hr class="summary-divider">
                     <div v-for="_ in 3" class="summary-lineitem">
@@ -52,11 +57,6 @@
                         <p class="summary-price">99.99 EUR</p>
                     </div>
                     <button class="checkout-btn" aria-label="Pokračovať k pokladni">Pokladňa</button>
-                </div>
-                <div class="sidebar-box">
-                    <h1>Kupóny</h1>
-                    <input v-model="coupon" class="coupon-input" type="text" placeholder="Zadaj kód kupónu...">
-                    <button @click="applyCoupon" class="coupon-btn" aria-label="Aplikuj kupón">Aplikuj</button>
                 </div>
             </aside>
         </section>
