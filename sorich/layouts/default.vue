@@ -22,12 +22,13 @@
                     </ul>
                 </div>
                 <div class="nav-right">
-                    <button>
-                        <Icon name="material-symbols:shopping-cart-outline-rounded" size="1.5rem"/>
-                    </button>
-                    <button>
-                        <Icon name="material-symbols:person-outline-rounded" size="1.5rem"/>
-                    </button>
+                    <NuxtLink to="">
+                        <Icon name="mdi:account-outline" size="1.5rem"/>
+                    </NuxtLink>
+                    <NuxtLink class="cart-link" to="/cart">
+                        <Icon name="mdi:cart-outline" size="1.5rem"/>
+                        <span>00.00 €</span>
+                    </NuxtLink>
                     <button class="mobile-nav-btn" @click.prevent="toggleMobileNav" aria-label="Toggle mobile navigation">
                         <Icon name="heroicons:bars-2" size="2rem"/>
                     </button>
@@ -202,6 +203,12 @@
         gap: 1rem;
     }
 
+    .cart-link {
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+    }
+
     .mobile-nav-btn {
         display: none;
     }
@@ -316,6 +323,10 @@
 
         .mobile-nav-btn {
             display: unset;
+        }
+
+        .cart-link span {
+            display: none;
         }
 
         .footer-top {
