@@ -28,7 +28,7 @@
                     <div class="swiper-product">
                         <nuxt-img class="swiper-product-img" :src="product.url" alt="product-image"/>
                         <p class="swiper-product-title">{{ product.title }}</p>
-                        <p class="swiper-product-price">{{ (product.price/100).toFixed(2) }} EUR</p>
+                        <p class="swiper-product-price">{{ formatPrice(product.price) }} EUR</p>
                     </div>
                 </SwiperSlide>
             </Swiper>
@@ -37,6 +37,8 @@
 </template>
 
 <script setup>
+    const { formatPrice } = useUtils();
+
     const products = [
         {
             id: 0,

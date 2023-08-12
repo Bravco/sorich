@@ -29,7 +29,7 @@
                         <nuxt-img class="swiper-product-img" :src="product.thumbnail" alt="product-image"/>
                         <p class="swiper-product-title">{{ product.title }}</p>
                         <p class="swiper-product-price">
-                            {{ product.variants[0] ? (product.variants[0].prices[0].amount/100).toFixed(2) : "" }}
+                            {{ product.variants[0] ? formatPrice(product.variants[0].prices[0].amount) : "" }}
                             {{ product.variants[0] ? product.variants[0].prices[0].currency_code.toUpperCase() : "" }}
                         </p>
                     </NuxtLink>
@@ -41,6 +41,7 @@
 
 <script setup>
     const medusaClient = useMedusaClient();
+    const { formatPrice } = useUtils();
 
     const { collections } = await medusaClient.collections.list({
         handle: ["nova-kolekcia"],

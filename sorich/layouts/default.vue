@@ -27,7 +27,10 @@
                     </NuxtLink>
                     <NuxtLink class="cart-link" to="/cart">
                         <Icon name="mdi:cart-outline" size="1.5rem"/>
-                        <span>00.00 €</span>
+                        <span v-if="cart">
+                            {{ formatPrice(cart.total) }}
+                            {{ cart.region.currency_code.toUpperCase() }}
+                        </span>
                     </NuxtLink>
                     <button class="mobile-nav-btn" @click.prevent="toggleMobileNav" aria-label="Prepnúť mobilnú navigáciu">
                         <Icon name="heroicons:bars-2" size="2rem"/>
@@ -99,6 +102,8 @@
 <script setup>
     const { afterEach } = useRouter();
     const medusaClient = useMedusaClient();
+    const { formatPrice } = useUtils();
+    const { cart } = useCart();
 
     const { product_categories } = await medusaClient.productCategories.list();
 

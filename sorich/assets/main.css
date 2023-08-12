@@ -52,3 +52,7 @@ input {
     color: var(--color-text);
     background: none;
 }
+
+.success {
+    color: greenyellow;
+}

@@ -41,7 +41,7 @@
                             <div class="product-description">
                                 <h4 class="product-title">{{ product.title }}</h4>
                                 <p class="product-price">
-                                    {{ product.variants[0] ? (product.variants[0].prices[0].amount/100).toFixed(2) : "" }}
+                                    {{ product.variants[0] ? formatPrice(product.variants[0].prices[0].amount) : "" }}
                                     {{ product.variants[0] ? product.variants[0].prices[0].currency_code.toUpperCase() : "" }}
                                 </p>
                             </div>
@@ -56,6 +56,7 @@
 <script setup>
     const { category_id: queryCategoryId } = useRoute().query;
     const medusaClient = useMedusaClient();
+    const { formatPrice } = useUtils();
     
     const { product_categories } = await medusaClient.productCategories.list();
 

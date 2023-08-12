@@ -42,16 +42,21 @@
                     <v-radio v-for="value in option.values" :key="value" :label="value" :value="value"/>
                 </v-radio-group>
                 <p class="product-price">
-                    {{ product.variants[0] ? (product.variants[0].prices[0].amount/100).toFixed(2) : "" }}
+                    {{ product.variants[0] ? formatPrice(product.variants[0].prices[0].amount) : "" }}
                     {{ product.variants[0] ? product.variants[0].prices[0].currency_code.toUpperCase() : "" }}
                 </p>
                 <div class="product-actions">
                     <Quantity v-model="quantity"/>
                     <button 
+                        @click.prevent="addToCart()"
                         class="add-to-cart-btn" 
                         :disabled="Object.keys(selectedOptions).length < options.length" 
                         :aria-label="`Pridať ${product.title} do košíka`"
                     >Pridať do košíka</button>
+                    <p v-if="success" class="success">
+                        Pridané do košíka
+                        <Icon name="mdi:check"/>
+                    </p>
                 </div>
             </div>
         </section>
@@ -61,12 +66,15 @@
 <script setup>
     const { id: productId } = useRoute().params;
     const medusaClient = useMedusaClient();
+    const { formatPrice } = useUtils();
+    const { cart, setCart } = useCart();
 
     const { product } = await medusaClient.products.retrieve(productId);
 
     const carouselIndex = ref(0);
     const selectedOptions = ref({});
     const quantity = ref(1);
+    const success = ref(false);
     
     const options = computed(() => {
         return product.options.map(option => {
@@ -80,6 +88,34 @@
             };
         });
     });
+
+    const selectedVariant = computed(() => {
+        const searchOptions = Object.values(selectedOptions.value);
+
+        for (const variant of product.variants) {
+            const optionsMatch = variant.options.every(option => {
+                return searchOptions.includes(option.value);
+            });
+
+            if (optionsMatch) {
+                return variant;
+            }
+        }
+
+        return null;
+    });
+
+    function addToCart() {
+        if (cart.value.id) {
+            medusaClient.carts.lineItems.create(cart.value.id, {
+                variant_id: selectedVariant.value.id,
+                quantity: quantity.value,
+            }).then(({ cart: updatedCart }) => {
+                setCart(updatedCart);
+                success.value = true;
+            });
+        }
+    }
 </script>
 
 <style scoped>

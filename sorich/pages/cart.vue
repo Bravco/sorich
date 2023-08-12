@@ -1,33 +1,38 @@
 <template>
     <div>
-        <section class="wrapper">
+        <section v-if="cart" class="wrapper">
             <div class="cart">
                 <h1>Nákupný košík</h1>
-                <ul class="product-list">
-                    <li v-for="_ in 3" class="product-item">
-                        <nuxt-img class="product-img" src="/images/product.webp" alt="product-image"/>
+                <ul v-if="Object.keys(cart.items).length !== 0" class="product-list">
+                    <li v-for="product in cart.items" :key="product.id" class="product-item">
+                        <nuxt-img class="product-img" :src="product.thumbnail" alt="product-image"/>
                         <div class="product-description">
-                            <h3 class="product-title">Product title</h3>
-                            <ul>
-                                <li class="product-option">
-                                    <p class="product-option-title">Veľkosť</p>
-                                    <span class="product-option-value">XL</span>
-                                </li>
-                                <li class="product-option">
-                                    <p class="product-option-title">Farba</p>
-                                    <span class="product-option-value">Čierna</span>
-                                </li>
-                            </ul>
-                            <p class="product-price">99.99 EUR</p>
+                            <h3 class="product-title">{{ product.title }}</h3>
+                            <div class="product-variant">
+                                <p class="product-variant-title">Variant</p>
+                                <span class="product-variant-value">{{ product.description }}</span>
+                            </div>
+                            <p class="product-price">
+                                {{ formatPrice(product.total) }}
+                                {{ cart.region.currency_code.toUpperCase() }}
+                            </p>
                             <div class="product-description-actions">
-                                <Quantity/>
-                                <button class="product-remove-btn" aria-label="Odstrániť produkt z košíka">
+                                <Quantity
+                                    v-model="product.quantity"
+                                    @update:model-value="(value) => updateLineItemQuantity(cart.id, product.id, value)" 
+                                />
+                                <button
+                                    @click.prevent="deleteLineItem(cart.id, product.id)"
+                                    class="product-remove-btn" 
+                                    aria-label="Odstrániť produkt z košíka"
+                                >
                                     Odstrániť z košíka
                                 </button>
                             </div>
                         </div>
                     </li>
                 </ul>
+                <p v-else>V nákupnom košíku nie sú žiadne produkty.</p>
             </div>
             <aside class="sidebar">
                 <div class="sidebar-box">
@@ -37,24 +42,36 @@
                 </div>
                 <div class="sidebar-box">
                     <h1>Zhrnutie objednávky</h1>
-                    <hr class="summary-divider">
-                    <div v-for="_ in 3" class="summary-lineitem">
-                        <p>Produkt</p>
-                        <p class="summary-price">33.33 EUR</p>
+                    <hr v-if="Object.keys(cart.items).length !== 0" class="summary-divider">
+                    <div v-for="product in cart.items" :key="product.id" class="summary-lineitem">
+                        <p>{{ product.title }}</p>
+                        <p class="summary-price">
+                            {{ formatPrice(product.total) }}
+                            {{ cart.region.currency_code.toUpperCase() }}
+                        </p>
                     </div>
                     <hr class="summary-divider">
                     <div class="summary-lineitem">
                         <p>Medzisúčet</p>
-                        <p class="summary-price">99.99 EUR</p>
+                        <p class="summary-price">
+                            {{ formatPrice(cart.subtotal) }}
+                            {{ cart.region.currency_code.toUpperCase() }}
+                        </p>
                     </div>
                     <div class="summary-lineitem">
                         <p>Zľavy</p>
-                        <p class="summary-price">00.00 EUR</p>
+                        <p class="summary-price">
+                            0.00 
+                            {{ cart.region.currency_code.toUpperCase() }}
+                        </p>
                     </div>
                     <hr class="summary-divider">
                     <div class="summary-lineitem">
                         <p>Celkovo</p>
-                        <p class="summary-price">99.99 EUR</p>
+                        <p class="summary-price">
+                            {{ formatPrice(cart.total) }}
+                            {{ cart.region.currency_code.toUpperCase() }}
+                        </p>
                     </div>
                     <button class="checkout-btn" aria-label="Pokračovať k pokladni">Pokladňa</button>
                 </div>
@@ -64,7 +81,22 @@
 </template>
 
 <script setup>
+    const medusaClient = useMedusaClient();
+    const { formatPrice } = useUtils();
+    const { cart, setCart } = useCart();
+
     const coupon = ref(null);
+
+    function updateLineItemQuantity(cartId, lineItemId, quantity) {
+        medusaClient.carts.lineItems.update(cartId, lineItemId, {
+            quantity: quantity,
+        }).then(({ cart: updatedCart }) => setCart(updatedCart));
+    }
+
+    function deleteLineItem(cartId, lineItemId) {
+        medusaClient.carts.lineItems.delete(cartId, lineItemId)
+        .then(({ cart: updatedCart }) => setCart(updatedCart));
+    }
 
     function applyCoupon() { }
 </script>
@@ -108,16 +140,16 @@
         padding: 1rem;
     }
 
-    .product-option {
+    .product-variant {
         display: flex;
         gap: .5rem;
     }
 
-    .product-option-title {
+    .product-variant-title {
         color: rgba(255, 255, 255, .5);
     }
 
-    .product-option-value {
+    .product-variant-value {
         font-weight: 500;
     }
 
@@ -187,5 +219,16 @@
         padding: .5rem 1rem;
         background-color: rgba(0, 0, 0, .25); 
         border-radius: .5rem;
+    }
+
+    @media only screen and (max-width: 1024px) {
+        .wrapper {
+            grid-template-columns: 1fr;
+        }
+
+        .sidebar {
+            position: static;
+            top: 6rem;
+        }
     }
 </style>
