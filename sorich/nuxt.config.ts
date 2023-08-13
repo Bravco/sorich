@@ -7,6 +7,7 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "@invictus.codes/nuxt-vuetify",
     "nuxt-swiper",
+    "nuxt-lodash",
   ],
   css: [
     "@/assets/main.css",

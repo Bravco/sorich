@@ -86,12 +86,12 @@
     const { cart, setCart } = useCart();
 
     const coupon = ref(null);
-
-    function updateLineItemQuantity(cartId, lineItemId, quantity) {
+    
+    const updateLineItemQuantity = useDebounce(function(cartId, lineItemId, quantity) {
         medusaClient.carts.lineItems.update(cartId, lineItemId, {
             quantity: quantity,
         }).then(({ cart: updatedCart }) => setCart(updatedCart));
-    }
+    }, 500);
 
     function deleteLineItem(cartId, lineItemId) {
         medusaClient.carts.lineItems.delete(cartId, lineItemId)
@@ -229,6 +229,14 @@
         .sidebar {
             position: static;
             top: 6rem;
+        }
+    }
+
+    @media only screen and (max-width: 768px) {
+        .product-description-actions {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: .5rem;
         }
     }
 </style>

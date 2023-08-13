@@ -53,6 +53,7 @@
                         :disabled="Object.keys(selectedOptions).length < options.length" 
                         :aria-label="`Pridať ${product.title} do košíka`"
                     >Pridať do košíka</button>
+                    <Icon v-if="loading" name="svg-spinners:90-ring-with-bg" size="1.5rem"/>
                     <p v-if="success" class="success">
                         Pridané do košíka
                         <Icon name="mdi:check"/>
@@ -74,6 +75,7 @@
     const carouselIndex = ref(0);
     const selectedOptions = ref({});
     const quantity = ref(1);
+    const loading = ref(false);
     const success = ref(false);
     
     const options = computed(() => {
@@ -107,11 +109,13 @@
 
     function addToCart() {
         if (cart().value.id) {
+            loading.value = true;
             medusaClient.carts.lineItems.create(cart().value.id, {
                 variant_id: selectedVariant.value.id,
                 quantity: quantity.value,
             }).then(({ cart: updatedCart }) => {
                 setCart(updatedCart);
+                loading.value = false;
                 success.value = true;
             });
         }
