@@ -1,6 +1,6 @@
 <template>
     <div>
-        <section class="main-wrapper">
+        <section v-if="product" class="main-wrapper">
             <NuxtLink class="return-link" to="/products">
                 <Icon name="mdi:arrow-left"/>
                 Vrátiť sa do obchodu
@@ -33,7 +33,7 @@
                 </div>
                 <v-radio-group 
                     v-for="option in options" 
-                    :key="option" 
+                    :key="option.title" 
                     v-model="selectedOptions[option.title]"
                     :label="option.title" 
                     inline
@@ -64,43 +64,56 @@
     </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
     const { id: productId } = useRoute().params;
     const medusaClient = useMedusaClient();
     const { formatPrice } = useUtils();
     const { cart, setCart } = useCart();
 
-    const { product } = await medusaClient.products.retrieve(productId);
+    const product = ref<any>(null);
+    const carouselIndex = ref<number>(0);
+    const selectedOptions = ref<any>({});
+    const quantity = ref<number>(1);
+    const loading = ref<boolean>(false);
+    const success = ref<boolean>(false);
 
-    const carouselIndex = ref(0);
-    const selectedOptions = ref({});
-    const quantity = ref(1);
-    const loading = ref(false);
-    const success = ref(false);
-    
+    medusaClient.products.retrieve(productId as string).then(({ product: fetchedProduct }) => {
+        product.value = fetchedProduct;
+    }).catch(() => {
+        navigateTo("/products");
+    });
+
     const options = computed(() => {
-        return product.options.map(option => {
-            const values = option.values
-                .map(valueObj => valueObj.value)
-                .filter((value, index, self) => self.indexOf(value) === index);
+        if (product.options) {
+            return product.options.map((option : any) => {
+                const values = option.values
+                    .map((valueObj : any) => valueObj.value)
+                    .filter((value : any, index : any, self : any) => self.indexOf(value) === index);
 
-            return {
-                title: option.title,
-                values: values,
-            };
-        });
+                return {
+                    title: option.title,
+                    values: values,
+                };
+            });
+        } else {
+            return [];
+        }
     });
 
     const selectedVariant = computed(() => {
         const searchOptions = Object.values(selectedOptions.value);
 
         for (const variant of product.variants) {
-            const optionsMatch = variant.options.every(option => {
-                return searchOptions.includes(option.value);
-            });
+            if (variant.options) {
+                const optionsMatch = variant.options.every((option : any) => {
+                    return searchOptions.includes(option.value);
+                });
 
-            if (optionsMatch) {
-                return variant;
+                if (optionsMatch) {
+                    return variant;
+                }
+            } else {
+                break;
             }
         }
 
@@ -108,7 +121,7 @@
     });
 
     function addToCart() {
-        if (cart().value.id) {
+        if (cart().value.id && selectedVariant.value && typeof selectedVariant.value.id === "string") {
             loading.value = true;
             medusaClient.carts.lineItems.create(cart().value.id, {
                 variant_id: selectedVariant.value.id,

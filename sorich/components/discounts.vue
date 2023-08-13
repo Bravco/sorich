@@ -36,26 +36,26 @@
     </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
     const { formatPrice } = useUtils();
 
     const products = [
         {
             id: 0,
             title: "SoRich Produkt 1",
-            price: "1999",
+            price: 1999,
             url: "/images/product.webp",
         },
         {
             id: 1,
             title: "SoRich Produkt 2",
-            price: "1999",
+            price: 1999,
             url: "/images/product.webp",
         },
         {
             id: 2,
             title: "SoRich Produkt 3",
-            price: "1999",
+            price: 1999,
             url: "/images/product.webp",
         },
     ];

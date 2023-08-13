@@ -32,6 +32,7 @@
                         variant="outlined"
                         item-color="var(--color-primary)"
                         density="compact"
+                        :clearable="true"
                     ></v-select>
                 </div>
                 <ul class="product-list">
@@ -53,17 +54,17 @@
     </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
     const { category_id: queryCategoryId } = useRoute().query;
     const medusaClient = useMedusaClient();
     const { formatPrice } = useUtils();
     
     const { product_categories } = await medusaClient.productCategories.list();
 
-    const products = ref(null);
-    const selectedCategoryId = ref(null);
-    const searchQuery = ref(null);
-    const orderBy = ref(null);
+    const products = ref<any>(null);
+    const selectedCategoryId = ref<string | null>(null);
+    const searchQuery = ref<string | null>(null);
+    const orderBy = ref<string | null>(null);
 
     assignProducts(queryCategoryId);
 
@@ -89,7 +90,7 @@
             return null;
         }
 
-        return sortedProducts.value.filter((product) => 
+        return sortedProducts.value.filter((product : any) => 
             product.title.toLowerCase()
                 .includes(typeof searchQuery.value === "string" ? searchQuery.value.toLowerCase() : "")
         );
@@ -101,12 +102,12 @@
         }
     }
 
-    async function assignProducts(categoryId) {
+    async function assignProducts(categoryId : any) {
         selectedCategoryId.value = categoryId === undefined
             ? null
             : categoryId;
 
-        const { products: categoryProducts } = (categoryId === null | categoryId === undefined )
+        const { products: categoryProducts } = (categoryId === null || categoryId === undefined)
             ? await medusaClient.products.list()
             : await medusaClient.products.list({ category_id: [categoryId] });
         

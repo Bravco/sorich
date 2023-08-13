@@ -80,7 +80,7 @@
     </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
     const medusaClient = useMedusaClient();
     const { formatPrice } = useUtils();
     const { cart, setCart } = useCart();
@@ -93,7 +93,7 @@
         }).then(({ cart: updatedCart }) => setCart(updatedCart));
     }, 500);
 
-    function deleteLineItem(cartId, lineItemId) {
+    function deleteLineItem(cartId : string, lineItemId : string) {
         medusaClient.carts.lineItems.delete(cartId, lineItemId)
         .then(({ cart: updatedCart }) => setCart(updatedCart));
     }

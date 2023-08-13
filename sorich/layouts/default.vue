@@ -99,7 +99,7 @@
     </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
     const { afterEach } = useRouter();
     const medusaClient = useMedusaClient();
     const { formatPrice } = useUtils();
@@ -107,8 +107,8 @@
 
     const { product_categories } = await medusaClient.productCategories.list();
 
-    const scrolled = ref(false);
-    const isMobileMenuActive = ref(false);
+    const scrolled = ref<boolean>(false);
+    const isMobileMenuActive = ref<boolean>(false);
 
     function toggleMobileNav() {
         isMobileMenuActive.value = !isMobileMenuActive.value;
