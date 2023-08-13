@@ -1,10 +1,10 @@
 <template>
     <div>
-        <section v-if="cart" class="wrapper">
+        <section v-if="cart().value" class="wrapper">
             <div class="cart">
                 <h1>Nákupný košík</h1>
-                <ul v-if="Object.keys(cart.items).length !== 0" class="product-list">
-                    <li v-for="product in cart.items" :key="product.id" class="product-item">
+                <ul v-if="Object.keys(cart().value.items).length !== 0" class="product-list">
+                    <li v-for="product in cart().value.items" :key="product.id" class="product-item">
                         <nuxt-img class="product-img" :src="product.thumbnail" alt="product-image"/>
                         <div class="product-description">
                             <h3 class="product-title">{{ product.title }}</h3>
@@ -14,15 +14,15 @@
                             </div>
                             <p class="product-price">
                                 {{ formatPrice(product.total) }}
-                                {{ cart.region.currency_code.toUpperCase() }}
+                                {{ cart().value.region.currency_code.toUpperCase() }}
                             </p>
                             <div class="product-description-actions">
                                 <Quantity
                                     v-model="product.quantity"
-                                    @update:model-value="(value) => updateLineItemQuantity(cart.id, product.id, value)" 
+                                    @update:model-value="(value) => updateLineItemQuantity(cart().value.id, product.id, value)" 
                                 />
                                 <button
-                                    @click.prevent="deleteLineItem(cart.id, product.id)"
+                                    @click.prevent="deleteLineItem(cart().value.id, product.id)"
                                     class="product-remove-btn" 
                                     aria-label="Odstrániť produkt z košíka"
                                 >
@@ -42,35 +42,35 @@
                 </div>
                 <div class="sidebar-box">
                     <h1>Zhrnutie objednávky</h1>
-                    <hr v-if="Object.keys(cart.items).length !== 0" class="summary-divider">
-                    <div v-for="product in cart.items" :key="product.id" class="summary-lineitem">
+                    <hr v-if="Object.keys(cart().value.items).length !== 0" class="summary-divider">
+                    <div v-for="product in cart().value.items" :key="product.id" class="summary-lineitem">
                         <p>{{ product.title }}</p>
                         <p class="summary-price">
                             {{ formatPrice(product.total) }}
-                            {{ cart.region.currency_code.toUpperCase() }}
+                            {{ cart().value.region.currency_code.toUpperCase() }}
                         </p>
                     </div>
                     <hr class="summary-divider">
                     <div class="summary-lineitem">
                         <p>Medzisúčet</p>
                         <p class="summary-price">
-                            {{ formatPrice(cart.subtotal) }}
-                            {{ cart.region.currency_code.toUpperCase() }}
+                            {{ formatPrice(cart().value.subtotal) }}
+                            {{ cart().value.region.currency_code.toUpperCase() }}
                         </p>
                     </div>
                     <div class="summary-lineitem">
                         <p>Zľavy</p>
                         <p class="summary-price">
                             0.00 
-                            {{ cart.region.currency_code.toUpperCase() }}
+                            {{ cart().value.region.currency_code.toUpperCase() }}
                         </p>
                     </div>
                     <hr class="summary-divider">
                     <div class="summary-lineitem">
                         <p>Celkovo</p>
                         <p class="summary-price">
-                            {{ formatPrice(cart.total) }}
-                            {{ cart.region.currency_code.toUpperCase() }}
+                            {{ formatPrice(cart().value.total) }}
+                            {{ cart().value.region.currency_code.toUpperCase() }}
                         </p>
                     </div>
                     <button class="checkout-btn" aria-label="Pokračovať k pokladni">Pokladňa</button>

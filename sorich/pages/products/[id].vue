@@ -106,8 +106,8 @@
     });
 
     function addToCart() {
-        if (cart.value.id) {
-            medusaClient.carts.lineItems.create(cart.value.id, {
+        if (cart().value.id) {
+            medusaClient.carts.lineItems.create(cart().value.id, {
                 variant_id: selectedVariant.value.id,
                 quantity: quantity.value,
             }).then(({ cart: updatedCart }) => {
