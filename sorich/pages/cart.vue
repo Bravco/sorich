@@ -130,6 +130,9 @@
 
     .product-img {
         height: 16rem;
+        aspect-ratio: 1/1;
+        object-fit: cover;
+        object-position: center;
     }
 
     .product-description {
