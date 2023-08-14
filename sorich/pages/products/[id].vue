@@ -84,8 +84,8 @@
     });
 
     const options = computed(() => {
-        if (product.options) {
-            return product.options.map((option : any) => {
+        if (product.value.options) {
+            return product.value.options.map((option : any) => {
                 const values = option.values
                     .map((valueObj : any) => valueObj.value)
                     .filter((value : any, index : any, self : any) => self.indexOf(value) === index);
@@ -103,7 +103,7 @@
     const selectedVariant = computed(() => {
         const searchOptions = Object.values(selectedOptions.value);
 
-        for (const variant of product.variants) {
+        for (const variant of product.value.variants) {
             if (variant.options) {
                 const optionsMatch = variant.options.every((option : any) => {
                     return searchOptions.includes(option.value);

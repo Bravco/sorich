@@ -22,9 +22,6 @@
                     </ul>
                 </div>
                 <div class="nav-right">
-                    <NuxtLink to="">
-                        <Icon name="mdi:account-outline" size="1.5rem"/>
-                    </NuxtLink>
                     <NuxtLink class="cart-link" to="/cart">
                         <Icon name="mdi:cart-outline" size="1.5rem"/>
                         <span v-if="cart().value">

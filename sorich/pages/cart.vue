@@ -73,7 +73,7 @@
                             {{ cart().value.region.currency_code.toUpperCase() }}
                         </p>
                     </div>
-                    <button class="checkout-btn" aria-label="Pokračovať k pokladni">Pokladňa</button>
+                    <NuxtLink class="checkout-link" to="/checkout">Pokladňa</NuxtLink>
                 </div>
             </aside>
         </section>
@@ -202,13 +202,14 @@
         font-weight: 500;
     }
 
-    .checkout-btn, .coupon-btn {
+    .checkout-link, .coupon-btn {
         width: 100%;
         padding: .5rem 0;
         border-radius: .5rem;
     }
 
-    .checkout-btn {
+    .checkout-link {
+        text-align: center;
         font-size: 1.125rem;
         font-weight: bold;
         background-color: var(--color-primary);
