@@ -52,6 +52,12 @@ const plugins = [
       },
     },
   },
+  {
+    resolve: "medusa-payment-stripe",
+    options: {
+      api_key: process.env.STRIPE_API_KEY,
+    },
+  },
 ];
 
 const modules = {
