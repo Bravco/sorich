@@ -37,8 +37,8 @@
             <aside class="sidebar">
                 <div class="sidebar-box">
                     <h1>Kupóny</h1>
-                    <input v-model="coupon" class="coupon-input" type="text" placeholder="Zadaj kód kupónu...">
-                    <button @click="applyCoupon" class="coupon-btn" aria-label="Aplikuj kupón">Aplikuj</button>
+                    <input v-model="discountCode" class="coupon-input" type="text" placeholder="Zadaj kód kupónu...">
+                    <button @click="applyDiscount" class="coupon-btn" aria-label="Aplikuj kupón">Aplikuj</button>
                 </div>
                 <div class="sidebar-box">
                     <h1>Zhrnutie objednávky</h1>
@@ -61,7 +61,7 @@
                     <div class="summary-lineitem">
                         <p>Zľavy</p>
                         <p class="summary-price">
-                            0.00 
+                            - {{ formatPrice(Math.abs(cart().value.total - cart().value.subtotal)) }}
                             {{ cart().value.region.currency_code.toUpperCase() }}
                         </p>
                     </div>
@@ -89,7 +89,7 @@
     const { formatPrice } = useUtils();
     const { cart, setCart } = useCart();
 
-    const coupon = ref(null);
+    const discountCode = ref<string | null>(null);
     
     const updateLineItemQuantity = useDebounce(function(cartId, lineItemId, quantity) {
         medusaClient.carts.lineItems.update(cartId, lineItemId, {
@@ -102,7 +102,20 @@
         .then(({ cart: updatedCart }) => setCart(updatedCart));
     }
 
-    function applyCoupon() { }
+    function applyDiscount() {
+        if (cart().value && discountCode.value) {
+            medusaClient.carts.update(cart().value.id, {
+                discounts: [
+                    { code: discountCode.value },
+                ],
+            }).then(({ cart: updatedCart }) => {
+                setCart(updatedCart);
+                discountCode.value = null;
+            }).catch(() => {
+                alert("Kupón neexistuje")
+            });
+        }
+    }
 </script>
 
 <style scoped>
