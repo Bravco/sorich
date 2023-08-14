@@ -79,6 +79,10 @@
 
     medusaClient.products.retrieve(productId as string).then(({ product: fetchedProduct }) => {
         product.value = fetchedProduct;
+
+        useHead({
+            title: `SoRich | ${fetchedProduct.title}`,
+        });
     }).catch(() => {
         navigateTo("/products");
     });

@@ -5,9 +5,7 @@
 </template>
 
 <script lang="ts" setup>
-    
+    useHead({
+        title: "SoRich | Pokladňa",
+    });
 </script>
-
-<style scoped>
-    
-</style>

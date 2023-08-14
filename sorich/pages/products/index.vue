@@ -55,6 +55,10 @@
 </template>
 
 <script lang="ts" setup>
+    useHead({
+        title: "SoRich | Obchod",
+    });
+
     const { category_id: queryCategoryId } = useRoute().query;
     const medusaClient = useMedusaClient();
     const { formatPrice } = useUtils();

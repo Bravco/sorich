@@ -81,6 +81,10 @@
 </template>
 
 <script lang="ts" setup>
+    useHead({
+        title: "SoRich | Nákupný Košík",
+    });
+
     const medusaClient = useMedusaClient();
     const { formatPrice } = useUtils();
     const { cart, setCart } = useCart();
