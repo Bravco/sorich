@@ -1,8 +1,8 @@
 <template>
     <div>
         <section v-if="cart().value" class="wrapper">
+            <h1 class="heading">Nákupný košík</h1>
             <div class="cart">
-                <h1>Nákupný košík</h1>
                 <ul v-if="Object.keys(cart().value.items).length !== 0" class="product-list">
                     <li v-for="product in cart().value.items" :key="product.id" class="product-item">
                         <nuxt-img class="product-img" :src="product.thumbnail" alt="product-image"/>
@@ -128,10 +128,8 @@
         padding: 6rem 10%;
     }
 
-    .cart, .sidebar, .sidebar-box {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
+    .heading {
+        grid-column: 1 / span 2;
     }
 
     .product-list {
@@ -193,6 +191,12 @@
         color: var(--color-primary);
     }
 
+    .sidebar, .sidebar-box {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
     .sidebar {
         position: sticky;
         top: 6rem;
@@ -243,6 +247,10 @@
     }
 
     @media only screen and (max-width: 1024px) {
+        .heading {
+            grid-column: auto;
+        }
+
         .wrapper {
             grid-template-columns: 1fr;
         }
@@ -254,6 +262,15 @@
     }
 
     @media only screen and (max-width: 768px) {
+        .product-item {
+            flex-direction: column;
+        }
+
+        .product-img {
+            height: 12rem;
+            aspect-ratio: unset;
+        }
+        
         .product-description-actions {
             flex-direction: column;
             align-items: flex-start;
