@@ -7,6 +7,7 @@
 
     --color-primary: #DE2525;
     --color-text: white;
+    --color-success: rgb(0, 187, 66);
 
     --main-horizontal-padding: 10%;
 }
@@ -54,5 +55,5 @@ input {
 }
 
 .success {
-    color: greenyellow;
+    color: var(--color-success);
 }

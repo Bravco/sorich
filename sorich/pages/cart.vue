@@ -44,7 +44,7 @@
                     <h1>Zhrnutie objednávky</h1>
                     <hr v-if="Object.keys(cart().value.items).length !== 0" class="summary-divider">
                     <div v-for="product in cart().value.items" :key="product.id" class="summary-lineitem">
-                        <p>{{ product.title }}</p>
+                        <p>{{ product.quantity + "x" }} {{ product.title }}</p>
                         <p class="summary-price">
                             {{ formatPrice(product.total) }}
                             {{ cart().value.region.currency_code.toUpperCase() }}
@@ -140,7 +140,9 @@
 
     .product-item {
         display: flex;
-        background-color: rgba(0, 0, 0, .1);
+        border: 1px solid rgba(255, 255, 255, .25);
+        border-radius: .5rem;
+        background-color: rgba(0, 0, 0, .25);
     }
 
     .product-img {
@@ -148,6 +150,7 @@
         aspect-ratio: 1/1;
         object-fit: cover;
         object-position: center;
+        border-radius: .5rem 0 0 .5rem;
     }
 
     .product-description {
@@ -207,6 +210,7 @@
         padding: 1rem 2rem;
         border: 1px solid rgba(255, 255, 255, .25);
         border-radius: .5rem;
+        background-color: rgba(0, 0, 0, .25);
     }
 
     .summary-divider {
@@ -269,6 +273,7 @@
         .product-img {
             height: 12rem;
             aspect-ratio: unset;
+            border-radius: .5rem .5rem 0  0;
         }
         
         .product-description-actions {
