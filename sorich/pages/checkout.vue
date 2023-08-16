@@ -93,7 +93,30 @@
                         <span v-if="Stage.DELIVERY < stage" class="completed-icon-container">
                             <Icon name="mdi:check" size="1.5rem"/>
                         </span>
-                        <form v-if="stage === Stage.DELIVERY" @submit.prevent="stage = Stage.PAYMENT" class="process-content">
+                        <form 
+                            v-if="stage === Stage.DELIVERY" 
+                            @submit.prevent="() => {
+                                if (selectedShippingOptionId) {
+                                    stage = Stage.PAYMENT;
+                                    addShipingMethod(cart().value.id);
+                                }
+                            }" 
+                            class="process-content"
+                        >
+                            <ul v-if="shippingOptions" class="shipping-option-list">
+                                <li 
+                                    v-for="shippingOption in shippingOptions" 
+                                    :key="shippingOption.id"
+                                    @click="selectedShippingOptionId = shippingOption.id"
+                                    :class="['shipping-option-item', { active: selectedShippingOptionId === shippingOption.id }]"
+                                >
+                                    <h3>{{ shippingOption.name }}</h3>
+                                    <p>
+                                        {{ formatPrice(shippingOption.amount) }}
+                                        {{ cart().value.region.currency_code.toUpperCase() }}
+                                    </p>
+                                </li>
+                            </ul>
                             <div class="process-footer">
                                 <button @click="stage = Stage.ADDRESS" class="back-btn" aria-label="Späť">
                                     <Icon name="uil:angle-left-b"/>
@@ -171,8 +194,19 @@
     const { formatPrice } = useUtils();
     const { cart, setCart } = useCart();
 
+    const shippingOptions = ref<any>(null);
     const stage = ref<Stage>(Stage.CONTACT);
     const data = ref<any>({});
+    const selectedShippingOptionId = ref<string | null>(null);
+
+    onMounted(async () => {
+        const cartId = localStorage.getItem("cart_id");
+        
+        if (cartId) {
+            const { shipping_options } = await medusaClient.shippingOptions.listCartOptions(cartId);
+            shippingOptions.value = shipping_options;
+        }
+    });
     
     function setShippingAddress(cartId : string) {
         medusaClient.carts.update(cartId, {
@@ -189,6 +223,14 @@
                 postal_code: data.value.postal_code,
             },
         }).then(({ cart: updatedCart }) => setCart(updatedCart));
+    }
+
+    function addShipingMethod(cartId : string) {
+        if (selectedShippingOptionId !== null) {
+            medusaClient.carts.addShippingMethod(cartId, {
+                option_id: selectedShippingOptionId.value as string,
+            }).then(({ cart: updatedCart }) => setCart(updatedCart));
+        }
     }
 </script>
 
@@ -304,6 +346,28 @@
         place-items: center;
         border-radius: 50%;
         background-color: var(--color-success);
+    }
+
+    .shipping-option-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .shipping-option-item {
+        padding: 1rem;
+        border: 1px solid white;
+        border-radius: .5rem;
+        cursor: pointer;
+        opacity: .5;
+        transition-property: opacity, border-color, box-shadow;
+        transition-duration: 300ms;
+    }
+
+    .shipping-option-item.active {
+        border-color: var(--color-success);
+        box-shadow: 0px 0px 8px 0px var(--color-success);
+        opacity: 1;
     }
 
     .sidebar {
