@@ -28,7 +28,14 @@
                         <span v-if="Stage.ADDRESS < stage" class="completed-icon-container">
                             <Icon name="mdi:check" size="1.5rem"/>
                         </span>
-                        <form v-if="stage === Stage.ADDRESS" @submit.prevent="stage = Stage.DELIVERY" class="process-content">
+                        <form
+                            v-if="stage === Stage.ADDRESS" 
+                            @submit.prevent="() => {
+                                stage = Stage.DELIVERY;
+                                setShippingAddress(cart().value.id);
+                            }" 
+                            class="process-content"
+                        >
                             <div class="inputfield-row">
                                 <div class="inputfield">
                                     <label for="first-name">Krstné meno</label>
@@ -73,7 +80,7 @@
                                 </div>
                             </div>
                             <div class="process-footer">
-                                <button @click.prevent="stage = Stage.CONTACT" class="back-btn" aria-label="Späť">
+                                <button @click="stage = Stage.CONTACT" class="back-btn" aria-label="Späť">
                                     <Icon name="uil:angle-left-b"/>
                                     Späť
                                 </button>
@@ -88,7 +95,7 @@
                         </span>
                         <form v-if="stage === Stage.DELIVERY" @submit.prevent="stage = Stage.PAYMENT" class="process-content">
                             <div class="process-footer">
-                                <button @click.prevent="stage = Stage.ADDRESS" class="back-btn" aria-label="Späť">
+                                <button @click="stage = Stage.ADDRESS" class="back-btn" aria-label="Späť">
                                     <Icon name="uil:angle-left-b"/>
                                     Späť
                                 </button>
@@ -100,7 +107,7 @@
                         <h2 class="process-heading">Platba</h2>
                         <form v-if="stage === Stage.PAYMENT" @submit.prevent="" class="process-content">
                             <div class="process-footer">
-                                <button @click.prevent="stage = Stage.DELIVERY" class="back-btn" aria-label="Späť">
+                                <button @click="stage = Stage.DELIVERY" class="back-btn" aria-label="Späť">
                                     <Icon name="uil:angle-left-b"/>
                                     Späť
                                 </button>
@@ -166,6 +173,23 @@
 
     const stage = ref<Stage>(Stage.CONTACT);
     const data = ref<any>({});
+    
+    function setShippingAddress(cartId : string) {
+        medusaClient.carts.update(cartId, {
+            email: data.value.email,            
+            shipping_address: {
+                first_name: data.value.first_name,
+                last_name: data.value.last_name,
+                phone: data.value.phone,
+                address_1: data.value.address_1,
+                address_2: data.value.address_2,
+                city: data.value.city,
+                country_code: data.value.country_code,
+                province: data.value.province,
+                postal_code: data.value.postal_code,
+            },
+        }).then(({ cart: updatedCart }) => setCart(updatedCart));
+    }
 </script>
 
 <style scoped>
