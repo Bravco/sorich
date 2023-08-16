@@ -99,6 +99,7 @@
                                 if (selectedShippingOptionId) {
                                     stage = Stage.PAYMENT;
                                     addShipingMethod(cart().value.id);
+                                    createPaymentSessions(cart().value.id)
                                 }
                             }" 
                             class="process-content"
@@ -128,7 +129,23 @@
                     </li>
                     <li class="process-item">
                         <h2 class="process-heading">Platba</h2>
-                        <form v-if="stage === Stage.PAYMENT" @submit.prevent="" class="process-content">
+                        <form v-if="stage === Stage.PAYMENT || true" @submit.prevent="" class="process-content">
+                            <div class="inputfield">
+                                <label for="provider-id">Provider</label>
+                                <select 
+                                    v-model="selectedProviderId" 
+                                    @change="setPaymentSession(cart().value.id)" 
+                                    name="provider-id" 
+                                    id="provider-id" 
+                                    required
+                                >
+                                    <option 
+                                        v-for="paymentSession in cart().value.payment_sessions" 
+                                        :key="paymentSession.id"
+                                        :value="paymentSession.provider_id"
+                                    >{{ paymentSession.provider_id }}</option>
+                                </select>
+                            </div>
                             <div class="process-footer">
                                 <button @click="stage = Stage.DELIVERY" class="back-btn" aria-label="Späť">
                                     <Icon name="uil:angle-left-b"/>
@@ -198,6 +215,7 @@
     const stage = ref<Stage>(Stage.CONTACT);
     const data = ref<any>({});
     const selectedShippingOptionId = ref<string | null>(null);
+    const selectedProviderId = ref<string | null>(null);
 
     onMounted(async () => {
         const cartId = localStorage.getItem("cart_id");
@@ -207,6 +225,7 @@
             shippingOptions.value = shipping_options;
         }
     });
+    
     
     function setShippingAddress(cartId : string) {
         medusaClient.carts.update(cartId, {
@@ -226,9 +245,22 @@
     }
 
     function addShipingMethod(cartId : string) {
-        if (selectedShippingOptionId !== null) {
+        if (selectedShippingOptionId.value !== null) {
             medusaClient.carts.addShippingMethod(cartId, {
-                option_id: selectedShippingOptionId.value as string,
+                option_id: selectedShippingOptionId.value,
+            }).then(({ cart: updatedCart }) => setCart(updatedCart));
+        }
+    }
+
+    function createPaymentSessions(cartId : string) {
+        medusaClient.carts.createPaymentSessions(cartId)
+            .then(({ cart: updatedCart }) => setCart(updatedCart));
+    }
+
+    function setPaymentSession(cartId : string) {
+        if (selectedProviderId.value !== null) {
+            medusaClient.carts.setPaymentSession(cartId, {
+                provider_id: selectedProviderId.value,
             }).then(({ cart: updatedCart }) => setCart(updatedCart));
         }
     }
