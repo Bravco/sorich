@@ -19,6 +19,11 @@ export default defineNuxtConfig({
       mode: "out-in",
     },
   },
+  runtimeConfig: {
+    public: {
+      STRIPE_KEY: process.env.STRIPE_KEY,
+    },
+  },
   nitro: {
     compressPublicAssets: true,
   },

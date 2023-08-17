@@ -2,7 +2,7 @@
     <div>
         <section v-if="cart().value" class="wrapper">
             <h1 class="heading">Pokladňa</h1>
-            <div class="process">
+            <div v-if="Object.keys(cart().value.items).length !== 0" class="process">
                 <ul class="process-list">
                     <li class="process-item">
                         <h2 class="process-heading">Kontakt</h2>
@@ -99,7 +99,7 @@
                                 if (selectedShippingOptionId) {
                                     stage = Stage.PAYMENT;
                                     addShipingMethod(cart().value.id);
-                                    createPaymentSessions(cart().value.id)
+                                    createPaymentSession(cart().value.id);
                                 }
                             }" 
                             class="process-content"
@@ -129,22 +129,14 @@
                     </li>
                     <li class="process-item">
                         <h2 class="process-heading">Platba</h2>
-                        <form v-if="stage === Stage.PAYMENT || true" @submit.prevent="" class="process-content">
+                        <form 
+                            @submit.prevent="handlePayment(cart().value.id)" 
+                            :style="{ display: stage === Stage.PAYMENT ? 'flex' : 'flex' }" 
+                            class="process-content"
+                        >
                             <div class="inputfield">
-                                <label for="provider-id">Provider</label>
-                                <select 
-                                    v-model="selectedProviderId" 
-                                    @change="setPaymentSession(cart().value.id)" 
-                                    name="provider-id" 
-                                    id="provider-id" 
-                                    required
-                                >
-                                    <option 
-                                        v-for="paymentSession in cart().value.payment_sessions" 
-                                        :key="paymentSession.id"
-                                        :value="paymentSession.provider_id"
-                                    >{{ paymentSession.provider_id }}</option>
-                                </select>
+                                <label>Credit Card</label>
+                                <div id="payment-element"/>
                             </div>
                             <div class="process-footer">
                                 <button @click="stage = Stage.DELIVERY" class="back-btn" aria-label="Späť">
@@ -157,6 +149,7 @@
                     </li>
                 </ul>
             </div>
+            <p v-else>V nákupnom košíku nie sú žiadne produkty.</p>
             <aside class="sidebar">
                 <h1>Zhrnutie objednávky</h1>
                 <hr v-if="Object.keys(cart().value.items).length !== 0" class="summary-divider">
@@ -196,6 +189,8 @@
 </template>
 
 <script lang="ts" setup>
+    import { Stripe, StripeElements, loadStripe } from "@stripe/stripe-js";
+
     enum Stage {
         CONTACT,
         ADDRESS,
@@ -207,15 +202,17 @@
         title: "SoRich | Pokladňa",
     });
 
+    const config = useRuntimeConfig();
     const medusaClient = useMedusaClient();
     const { formatPrice } = useUtils();
     const { cart, setCart } = useCart();
+    let stripe: Stripe | null;
+    let elements: StripeElements;
 
     const shippingOptions = ref<any>(null);
     const stage = ref<Stage>(Stage.CONTACT);
     const data = ref<any>({});
     const selectedShippingOptionId = ref<string | null>(null);
-    const selectedProviderId = ref<string | null>(null);
 
     onMounted(async () => {
         const cartId = localStorage.getItem("cart_id");
@@ -224,6 +221,20 @@
             const { shipping_options } = await medusaClient.shippingOptions.listCartOptions(cartId);
             shippingOptions.value = shipping_options;
         }
+
+        stripe = await loadStripe(config.public.STRIPE_KEY);
+        
+        elements = stripe!.elements({
+            mode: "payment",
+            currency: "eur",
+            amount: 1000,
+        });
+
+        const paymentElement = elements.create("payment");
+        if (document.getElementById("payment-element")) {
+            paymentElement.mount("#payment-element");
+        }
+        
     });
     
     
@@ -252,16 +263,73 @@
         }
     }
 
-    function createPaymentSessions(cartId : string) {
-        medusaClient.carts.createPaymentSessions(cartId)
-            .then(({ cart: updatedCart }) => setCart(updatedCart));
+    async function createPaymentSession(cartId : string) {
+        medusaClient.carts.createPaymentSessions(cartId).then(({ cart: newCart }) => {
+            const isStripeAvailable = newCart.payment_sessions?.some((session) => (
+                session.provider_id === "stripe"
+            ));
+        
+            if (!isStripeAvailable) return;
+
+            medusaClient.carts.setPaymentSession(cartId, {
+                provider_id: "stripe",
+            }).then(({ cart: updatedCart }) => setCart(updatedCart));
+        });
     }
 
-    function setPaymentSession(cartId : string) {
-        if (selectedProviderId.value !== null) {
-            medusaClient.carts.setPaymentSession(cartId, {
-                provider_id: selectedProviderId.value,
-            }).then(({ cart: updatedCart }) => setCart(updatedCart));
+    async function handlePayment(cartId : string) {
+        if (!stripe || !elements) return;
+
+        try {
+            const { error: validationError } = await elements.submit();
+            if (validationError) return;
+
+            /*stripe.confirmCardPayment(cart().value.payment_session.data.client_secret, {
+                payment_method: {
+                    card: elements.getElement("card") as StripeCardElement,
+                    billing_details: {
+                        name: data.value.first_name + " " + data.value.last_name,
+                        email: data.value.email,
+                        phone: data.value.phone,
+                        address: {
+                            country: data.value.country_code,
+                            state: data.value.province,
+                            city: data.value.city,
+                            postal_code: data.value.postal_code,   
+                            line1: data.value.address_1,
+                            line2: data.value.address_2,
+                        },
+                    },
+                },
+            }).then(({ error, paymentIntent }) => {
+                console.log(error);
+                console.log(paymentIntent);
+                medusaClient.carts.complete(cartId).then((resp) => console.log(resp));
+            });*/
+
+            stripe.confirmPayment({
+                elements: elements,
+                clientSecret: cart().value.payment_session.data.client_secret,
+                confirmParams: {
+                    receipt_email: data.value.email,
+                    shipping: {
+                        name: data.value.first_name + " " + data.value.last_name,
+                        phone: data.value.phone,
+                        address: {
+                            country: data.value.country_code,
+                            state: data.value.province,
+                            city: data.value.city,
+                            postal_code: data.value.postal_code,   
+                            line1: data.value.address_1,
+                            line2: data.value.address_2,
+                        },
+                    },
+                    return_url: "http://localhost:3000",
+                },
+            }).then(({ error }) => console.log(error));
+
+        } catch(e) {
+            console.error(e);
         }
     }
 </script>
@@ -319,7 +387,7 @@
         width: 100%;
         display: flex;
         flex-direction: column;
-        align-items: flex-start;
+        align-items: stretch;
         gap: .5rem;
     }
 
