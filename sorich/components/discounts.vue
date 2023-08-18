@@ -25,11 +25,14 @@
                 }"
             >
                 <SwiperSlide v-for="product in products" :key="product.id">
-                    <div class="swiper-product">
-                        <nuxt-img class="swiper-product-img" :src="product.url" alt="product-image"/>
+                    <NuxtLink class="swiper-product" :to="`/products/${product.id}`">
+                        <nuxt-img class="swiper-product-img" :src="product.thumbnail ?? undefined" alt="product-image"/>
                         <p class="swiper-product-title">{{ product.title }}</p>
-                        <p class="swiper-product-price">{{ formatPrice(product.price) }} EUR</p>
-                    </div>
+                        <p class="swiper-product-price">
+                            {{ product.variants[0] ? formatPrice(product.variants[0].prices[0].amount) : "" }}
+                            {{ product.variants[0] ? product.variants[0].prices[0].currency_code.toUpperCase() : "" }}
+                        </p>
+                    </NuxtLink>
                 </SwiperSlide>
             </Swiper>
         </section>
@@ -37,28 +40,16 @@
 </template>
 
 <script lang="ts" setup>
+    const medusaClient = useMedusaClient();
     const { formatPrice } = useUtils();
 
-    const products = [
-        {
-            id: 0,
-            title: "SoRich Produkt 1",
-            price: 1999,
-            url: "/images/product.webp",
-        },
-        {
-            id: 1,
-            title: "SoRich Produkt 2",
-            price: 1999,
-            url: "/images/product.webp",
-        },
-        {
-            id: 2,
-            title: "SoRich Produkt 3",
-            price: 1999,
-            url: "/images/product.webp",
-        },
-    ];
+    const { collections } = await medusaClient.collections.list({
+        handle: ["zlava"],
+    });
+
+    const { products } = await medusaClient.products.list({
+        collection_id: [collections[0].id],
+    });
 </script>
 
 <style scoped>
