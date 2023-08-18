@@ -131,10 +131,10 @@
                         <h2 class="process-heading">Platba</h2>
                         <form 
                             @submit.prevent="handlePayment(cart().value.id)" 
-                            :style="{ display: stage === Stage.PAYMENT ? 'flex' : 'flex' }" 
+                            :style="{ display: stage === Stage.PAYMENT ? 'flex' : 'none' }" 
                             class="process-content"
                         >
-                            <div class="inputfield">
+                            <div class="inputfield required">
                                 <label>Credit Card</label>
                                 <div id="card-element"/>
                             </div>
@@ -171,7 +171,14 @@
                 <div class="summary-lineitem">
                     <p>Zľavy</p>
                     <p class="summary-price">
-                        - {{ formatPrice(Math.abs(cart().value.total - cart().value.subtotal)) }}
+                        - {{ formatPrice(cart().value.discount_total) }}
+                        {{ cart().value.region.currency_code.toUpperCase() }}
+                    </p>
+                </div>
+                <div class="summary-lineitem">
+                    <p>Doprava</p>
+                    <p class="summary-price">
+                        {{ formatPrice(cart().value.shipping_total) }}
                         {{ cart().value.region.currency_code.toUpperCase() }}
                     </p>
                 </div>
@@ -220,7 +227,6 @@
         if (cartId) {
             const { shipping_options } = await medusaClient.shippingOptions.listCartOptions(cartId);
             shippingOptions.value = shipping_options;
-            console.log(cart().value);
         }
 
         stripe = await loadStripe(config.public.STRIPE_KEY);
@@ -228,10 +234,17 @@
         elements = stripe!.elements({
             mode: "payment",
             currency: "eur",
-            amount: 1000,
+            amount: cart().value.total,
         });
         
-        const cardElement = elements.create("card");
+        const cardElement = elements.create("card", {
+            style: {
+                base: {
+                    fontSize: "1.125rem",
+                    color: "white",
+                },
+            },
+        });
         if (document.getElementById("card-element")) {
             cardElement.mount("#card-element");
         }
@@ -273,20 +286,25 @@
 
             medusaClient.carts.setPaymentSession(cartId, {
                 provider_id: "stripe",
-            }).then(({ cart: updatedCart }) => {
-                setCart(updatedCart);
-                console.log(cart().value);
-            });
+            }).then(({ cart: updatedCart }) => setCart(updatedCart));
         });
     }
 
     async function handlePayment(cartId : string) {
         if (!stripe || !elements) return;
 
-        try {
-            const { error: validationError } = await elements.submit();
-            if (validationError) return;
+        const { error: elementsError } = await elements.submit();
+        if (elementsError) return;
 
+        const cardElementContainer = document.querySelector('#card-element');
+        let cardElementComplete = cardElementContainer!.classList.contains('StripeElement--complete');
+        if (!cardElementComplete) return;
+
+        elements.update({
+            amount: cart().value.total,
+        });
+
+        try {
             stripe.confirmCardPayment(cart().value.payment_session.data.client_secret, {
                 payment_method: {
                     card: elements.getElement("card") as StripeCardElement,

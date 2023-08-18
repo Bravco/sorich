@@ -61,7 +61,7 @@
                     <div class="summary-lineitem">
                         <p>Zľavy</p>
                         <p class="summary-price">
-                            - {{ formatPrice(Math.abs(cart().value.total - cart().value.subtotal)) }}
+                            - {{ formatPrice(cart().value.discount_total) }}
                             {{ cart().value.region.currency_code.toUpperCase() }}
                         </p>
                     </div>
