@@ -136,7 +136,7 @@
                         >
                             <div class="inputfield">
                                 <label>Credit Card</label>
-                                <div id="payment-element"/>
+                                <div id="card-element"/>
                             </div>
                             <div class="process-footer">
                                 <button @click="stage = Stage.DELIVERY" class="back-btn" aria-label="Späť">
@@ -189,7 +189,7 @@
 </template>
 
 <script lang="ts" setup>
-    import { Stripe, StripeElements, loadStripe } from "@stripe/stripe-js";
+    import { Stripe, StripeElements, loadStripe, StripeCardElement } from "@stripe/stripe-js";
 
     enum Stage {
         CONTACT,
@@ -220,6 +220,7 @@
         if (cartId) {
             const { shipping_options } = await medusaClient.shippingOptions.listCartOptions(cartId);
             shippingOptions.value = shipping_options;
+            console.log(cart().value);
         }
 
         stripe = await loadStripe(config.public.STRIPE_KEY);
@@ -229,12 +230,11 @@
             currency: "eur",
             amount: 1000,
         });
-
-        const paymentElement = elements.create("payment");
-        if (document.getElementById("payment-element")) {
-            paymentElement.mount("#payment-element");
-        }
         
+        const cardElement = elements.create("card");
+        if (document.getElementById("card-element")) {
+            cardElement.mount("#card-element");
+        }
     });
     
     
@@ -273,7 +273,10 @@
 
             medusaClient.carts.setPaymentSession(cartId, {
                 provider_id: "stripe",
-            }).then(({ cart: updatedCart }) => setCart(updatedCart));
+            }).then(({ cart: updatedCart }) => {
+                setCart(updatedCart);
+                console.log(cart().value);
+            });
         });
     }
 
@@ -284,7 +287,7 @@
             const { error: validationError } = await elements.submit();
             if (validationError) return;
 
-            /*stripe.confirmCardPayment(cart().value.payment_session.data.client_secret, {
+            stripe.confirmCardPayment(cart().value.payment_session.data.client_secret, {
                 payment_method: {
                     card: elements.getElement("card") as StripeCardElement,
                     billing_details: {
@@ -301,33 +304,17 @@
                         },
                     },
                 },
-            }).then(({ error, paymentIntent }) => {
-                console.log(error);
-                console.log(paymentIntent);
-                medusaClient.carts.complete(cartId).then((resp) => console.log(resp));
-            });*/
-
-            stripe.confirmPayment({
-                elements: elements,
-                clientSecret: cart().value.payment_session.data.client_secret,
-                confirmParams: {
-                    receipt_email: data.value.email,
-                    shipping: {
-                        name: data.value.first_name + " " + data.value.last_name,
-                        phone: data.value.phone,
-                        address: {
-                            country: data.value.country_code,
-                            state: data.value.province,
-                            city: data.value.city,
-                            postal_code: data.value.postal_code,   
-                            line1: data.value.address_1,
-                            line2: data.value.address_2,
-                        },
-                    },
-                    return_url: "http://localhost:3000",
-                },
-            }).then(({ error }) => console.log(error));
-
+            }).then(() => {
+                medusaClient.carts.complete(cartId).then(({ type, data }) => {
+                    medusaClient.carts.create().then(({ cart: newCart }) => {
+                        localStorage.setItem("cart_id", newCart.id);
+                        setCart(newCart);
+                    });
+                    if (type === "order") {
+                        navigateTo(`/${data.id}`);
+                    }
+                });
+            });
         } catch(e) {
             console.error(e);
         }

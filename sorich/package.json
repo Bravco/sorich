@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@stripe/stripe-js": "^2.1.0",
-    "nuxt-swiper": "^1.2.0"
+    "nuxt-swiper": "^1.2.0",
+    "stripe": "^13.1.0"
   }
 }
