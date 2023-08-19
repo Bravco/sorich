@@ -74,7 +74,7 @@
                             <NuxtLink to="">Veľkostné tabuľky</NuxtLink>
                         </li>
                         <li class="footer-item-link">
-                            <NuxtLink to="">Obchodné podmienky</NuxtLink>
+                            <NuxtLink to="/businessConditions">Obchodné podmienky</NuxtLink>
                         </li>
                     </ul>
                 </div>

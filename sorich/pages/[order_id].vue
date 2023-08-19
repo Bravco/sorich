@@ -180,4 +180,10 @@
     .summary-price {
         font-weight: 500;
     }
+
+    @media only screen and (max-width: 768px) {
+        .product-item {
+            flex-direction: column;
+        }
+    }
 </style>
