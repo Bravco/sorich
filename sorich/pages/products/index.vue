@@ -38,7 +38,7 @@
                 <ul class="product-list">
                     <li v-for="product in queryProducts" :key="product.id">
                         <NuxtLink :to="`/products/${product.id}`">
-                            <nuxt-img class="product-img" :src="product.thumbnail" loading="lazy" alt="product-image"/>
+                            <nuxt-img class="product-img" :src="product.thumbnail" format="webp" loading="lazy" alt="product-image"/>
                             <div class="product-description">
                                 <h4 class="product-title">{{ product.title }}</h4>
                                 <p class="product-price">

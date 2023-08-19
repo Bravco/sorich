@@ -13,6 +13,7 @@
                         @click="carouselIndex = index"
                         class="option-img" 
                         :src="image.url" 
+                        format="webp"
                         alt="product-image"
                     />
                 </div>

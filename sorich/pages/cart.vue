@@ -5,7 +5,7 @@
             <div class="cart">
                 <ul v-if="Object.keys(cart().value.items).length !== 0" class="product-list">
                     <li v-for="product in cart().value.items" :key="product.id" class="product-item">
-                        <nuxt-img class="product-img" :src="product.thumbnail" alt="product-image"/>
+                        <nuxt-img class="product-img" :src="product.thumbnail" format="webp" alt="product-image"/>
                         <div class="product-description">
                             <h3 class="product-title">{{ product.title }}</h3>
                             <div class="product-variant">

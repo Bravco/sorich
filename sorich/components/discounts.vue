@@ -26,7 +26,7 @@
             >
                 <SwiperSlide v-for="product in products" :key="product.id">
                     <NuxtLink class="swiper-product" :to="`/products/${product.id}`">
-                        <nuxt-img class="swiper-product-img" :src="product.thumbnail ?? undefined" alt="product-image"/>
+                        <nuxt-img class="swiper-product-img" :src="product.thumbnail ?? undefined" format="webp" alt="product-image"/>
                         <p class="swiper-product-title">{{ product.title }}</p>
                         <p class="swiper-product-price">
                             {{ product.variants[0] ? formatPrice(product.variants[0].prices[0].amount) : "" }}
