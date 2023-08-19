@@ -28,10 +28,17 @@
                     <NuxtLink class="swiper-product" :to="`/products/${product.id}`">
                         <nuxt-img class="swiper-product-img" :src="product.thumbnail ?? undefined" format="webp" alt="product-image"/>
                         <p class="swiper-product-title">{{ product.title }}</p>
-                        <p class="swiper-product-price">
-                            {{ product.variants[0] ? formatPrice(product.variants[0].prices[0].amount) : "" }}
-                            {{ product.variants[0] ? product.variants[0].prices[0].currency_code.toUpperCase() : "" }}
-                        </p>
+                        <div class="price-wrapper">
+                            <p class="swiper-product-price">
+                                {{ formatPrice(getSalePrice(product)?.amount) }}
+                                {{ getSalePrice(product)?.currency_code.toUpperCase() }}
+                            </p>
+                            <p class="old-price swiper-product-price">
+                                {{ product.variants[0] ? formatPrice(product.variants[0].prices[0].amount) : "" }}
+                                {{ product.variants[0] ? product.variants[0].prices[0].currency_code.toUpperCase() : "" }}
+                            </p>
+                        </div>
+                        <div class="sale-sticker">ZĽAVA</div>
                     </NuxtLink>
                 </SwiperSlide>
             </Swiper>
@@ -43,13 +50,18 @@
     const medusaClient = useMedusaClient();
     const { formatPrice } = useUtils();
 
-    const { collections } = await medusaClient.collections.list({
-        handle: ["zlava"],
+    const products = (await medusaClient.products.list()).products.filter(product => {
+        return product.variants.some(variant => {
+            return variant.prices.some(price => price.price_list && price.price_list.type === "sale");
+        });
     });
 
-    const { products } = await medusaClient.products.list({
-        collection_id: [collections[0].id],
-    });
+    function getSalePrice(product : any) {
+        return product.variants[0].prices.find((price : any) => {
+            if (price.price_list && price.price_list.type === "sale")
+                return true;
+        });
+    }
 </script>
 
 <style scoped>
@@ -70,6 +82,44 @@
 
     .discount-swiper {
         margin-left: 25%;
+    }
+
+    
+
+    .price-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: .5rem;
+        line-height: 1.5rem;
+    }
+
+    .old-price {
+        position: relative;
+        font-size: 1rem;
+        color: black;
+    }
+
+    .old-price::after {
+        content: "";
+        width: 110%;
+        height: 2px;
+        position: absolute;
+        top: 50%;
+        left: -5%;
+        background-color: red;
+    }
+
+    .sale-sticker {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        padding: .5rem .75rem;
+        line-height: 1rem;
+        font-weight: bold;
+        color: white;
+        background-color: var(--color-primary);
+        border-radius: 2rem;
     }
 
     @media only screen and (max-width: 1480px) {

@@ -2,7 +2,7 @@
     <div>
         <HomeHero/>
         <HomeNew/>
-        <Discounts/>
+        <Sale/>
         <HomeOrderProcess/>
     </div>
 </template>

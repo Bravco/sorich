@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Discounts/>
+        <Sale/>
         <section class="main-wrapper">
             <aside class="categories-wrapper">
                 <h3 class="category-heading">Kategórie</h3>
