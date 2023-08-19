@@ -71,7 +71,7 @@
                     <span class="footer-item-header">Dokumenty</span>
                     <ul>
                         <li class="footer-item-link">
-                            <NuxtLink to="">Veľkostné tabuľky</NuxtLink>
+                            <NuxtLink to="/sizeTables">Veľkostné tabuľky</NuxtLink>
                         </li>
                         <li class="footer-item-link">
                             <NuxtLink to="/businessConditions">Obchodné podmienky</NuxtLink>
