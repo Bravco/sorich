@@ -144,7 +144,7 @@
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 2rem;
-        padding: 6rem 10%;
+        padding: 6rem var(--main-horizontal-padding);
     }
 
     .return-link {

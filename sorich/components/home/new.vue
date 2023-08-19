@@ -56,7 +56,7 @@
     .new {
         position: relative;
         margin: 4rem 0;
-        padding: 0 10%;
+        padding: 0 var(--main-horizontal-padding);
     }
 
     .new::after {

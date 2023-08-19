@@ -125,7 +125,7 @@
         align-items: start;
         grid-template-columns: 2fr 1fr;
         gap: 2rem;
-        padding: 6rem 10%;
+        padding: 6rem var(--main-horizontal-padding);
     }
 
     .heading {

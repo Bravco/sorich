@@ -33,7 +33,7 @@
 
 <style scoped>
     .order-process {
-        padding: 8rem 10%;
+        padding: 8rem var(--main-horizontal-padding);
     }
 
     .order-process-list {

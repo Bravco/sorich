@@ -128,7 +128,7 @@
         align-items: start;
         grid-template-columns: auto 1fr;
         gap: 2rem;
-        padding: 4rem 10%;
+        padding: 4rem var(--main-horizontal-padding);
     }
 
     .categories-wrapper, .products-wrapper {

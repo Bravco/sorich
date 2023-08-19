@@ -55,7 +55,7 @@
 <style scoped>
     .discount {
         position: relative;
-        padding: 8rem 10% 8rem 0;
+        padding: 8rem var(--main-horizontal-padding) 8rem 0;
         background: linear-gradient(166deg, #B92323 0%, #521111 100%);
     }
 
@@ -74,7 +74,7 @@
 
     @media only screen and (max-width: 1480px) {
         .discount {
-            padding: 6rem 10%;
+            padding: 6rem var(--main-horizontal-padding);
         }
 
         .discount-heading {

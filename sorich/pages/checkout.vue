@@ -6,9 +6,7 @@
                 <ul class="process-list">
                     <li class="process-item">
                         <h2 class="process-heading">Kontakt</h2>
-                        <span v-if="Stage.CONTACT < stage" class="completed-icon-container">
-                            <Icon name="mdi:check" size="1.5rem"/>
-                        </span>
+                        <SuccessIcon v-if="Stage.CONTACT < stage" class="completed"/>
                         <form v-if="stage === Stage.CONTACT" @submit.prevent="stage = Stage.ADDRESS" class="process-content">
                             <div class="inputfield">
                                 <label for="email">Email</label>
@@ -25,9 +23,7 @@
                     </li>
                     <li class="process-item">
                         <h2 class="process-heading">Adresa</h2>
-                        <span v-if="Stage.ADDRESS < stage" class="completed-icon-container">
-                            <Icon name="mdi:check" size="1.5rem"/>
-                        </span>
+                        <SuccessIcon v-if="Stage.ADDRESS < stage" class="completed"/>
                         <form
                             v-if="stage === Stage.ADDRESS" 
                             @submit.prevent="() => {
@@ -90,9 +86,7 @@
                     </li>
                     <li class="process-item">
                         <h2 class="process-heading">Donáška</h2>
-                        <span v-if="Stage.DELIVERY < stage" class="completed-icon-container">
-                            <Icon name="mdi:check" size="1.5rem"/>
-                        </span>
+                        <SuccessIcon v-if="Stage.DELIVERY < stage" class="completed"/>
                         <form 
                             v-if="stage === Stage.DELIVERY" 
                             @submit.prevent="() => {
@@ -346,7 +340,7 @@
         align-items: start;
         grid-template-columns: 2fr 1fr;
         gap: 2rem;
-        padding: 6rem 10%;
+        padding: 6rem var(--main-horizontal-padding);
     }
 
     .heading {
@@ -369,7 +363,7 @@
         background-color: rgba(0, 0, 0, .25);
     }
 
-    .process-item:has(.completed-icon-container) {
+    .process-item:has(.completed) {
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
@@ -441,15 +435,6 @@
     }
 
     .pay-btn {
-        background-color: var(--color-success);
-    }
-
-    .completed-icon-container {
-        width: 2rem;
-        height: 2rem;
-        display: grid;
-        place-items: center;
-        border-radius: 50%;
         background-color: var(--color-success);
     }
 
