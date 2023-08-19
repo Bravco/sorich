@@ -43,8 +43,8 @@
                     <v-radio v-for="value in option.values" :key="value" :label="value" :value="value"/>
                 </v-radio-group>
                 <p class="product-price">
-                    {{ product.variants[0] ? formatPrice(product.variants[0].prices[0].amount) : "" }}
-                    {{ product.variants[0] ? product.variants[0].prices[0].currency_code.toUpperCase() : "" }}
+                    {{ formatPrice(lowestPrice(product)?.amount) }}
+                    {{ lowestPrice(product)?.currency_code.toUpperCase() }}
                 </p>
                 <div class="product-actions">
                     <Quantity v-model="quantity"/>
@@ -68,7 +68,7 @@
 <script lang="ts" setup>
     const { id: productId } = useRoute().params;
     const medusaClient = useMedusaClient();
-    const { formatPrice } = useUtils();
+    const { lowestPrice, formatPrice } = useUtils();
     const { cart, setCart } = useCart();
 
     const product = ref<any>(null);

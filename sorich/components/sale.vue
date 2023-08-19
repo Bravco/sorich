@@ -30,8 +30,8 @@
                         <p class="swiper-product-title">{{ product.title }}</p>
                         <div class="price-wrapper">
                             <p class="swiper-product-price">
-                                {{ formatPrice(getSalePrice(product)?.amount) }}
-                                {{ getSalePrice(product)?.currency_code.toUpperCase() }}
+                                {{ formatPrice(lowestPrice(product)?.amount) }}
+                                {{ lowestPrice(product)?.currency_code.toUpperCase() }}
                             </p>
                             <p class="old-price swiper-product-price">
                                 {{ product.variants[0] ? formatPrice(product.variants[0].prices[0].amount) : "" }}
@@ -48,20 +48,13 @@
 
 <script lang="ts" setup>
     const medusaClient = useMedusaClient();
-    const { formatPrice } = useUtils();
+    const { lowestPrice, formatPrice } = useUtils();
 
     const products = (await medusaClient.products.list()).products.filter(product => {
         return product.variants.some(variant => {
             return variant.prices.some(price => price.price_list && price.price_list.type === "sale");
         });
     });
-
-    function getSalePrice(product : any) {
-        return product.variants[0].prices.find((price : any) => {
-            if (price.price_list && price.price_list.type === "sale")
-                return true;
-        });
-    }
 </script>
 
 <style scoped>

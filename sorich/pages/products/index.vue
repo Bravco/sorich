@@ -42,8 +42,8 @@
                             <div class="product-description">
                                 <h4 class="product-title">{{ product.title }}</h4>
                                 <p class="product-price">
-                                    {{ product.variants[0] ? formatPrice(product.variants[0].prices[0].amount) : "" }}
-                                    {{ product.variants[0] ? product.variants[0].prices[0].currency_code.toUpperCase() : "" }}
+                                    {{ formatPrice(lowestPrice(product)?.amount) }}
+                                    {{ lowestPrice(product)?.currency_code.toUpperCase() }}
                                 </p>
                             </div>
                         </NuxtLink>
@@ -61,7 +61,7 @@
 
     const { category_id: queryCategoryId } = useRoute().query;
     const medusaClient = useMedusaClient();
-    const { formatPrice } = useUtils();
+    const { lowestPrice, formatPrice } = useUtils();
     
     const { product_categories } = await medusaClient.productCategories.list();
 
@@ -79,10 +79,10 @@
 
         switch (orderBy.value) {
             case "ceny (zostupne)":
-                return [...products.value].sort((a, b) => a.variants[0].prices[0].amount - b.variants[0].prices[0].amount);
+                return [...products.value].sort((a, b) => lowestPrice(a)?.amount - lowestPrice(b)?.amount);
         
             case "ceny (vzostupne)":
-                return [...products.value].sort((a, b) => a.variants[0].prices[0].amount - b.variants[0].prices[0].amount).reverse();
+                return [...products.value].sort((a, b) => lowestPrice(a)?.amount - lowestPrice(b)?.amount).reverse();
             
             default:
                 return products.value;
