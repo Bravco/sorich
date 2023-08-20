@@ -137,7 +137,10 @@
                                     <Icon name="uil:angle-left-b"/>
                                     Späť
                                 </button>
-                                <button class="pay-btn" type="submit" aria-label="Zaplatiť">Zaplatiť</button>
+                                <div>
+                                    <Icon v-if="paymentLoading" name="svg-spinners:90-ring-with-bg" size="1.5rem"/>
+                                    <button class="pay-btn" type="submit" aria-label="Zaplatiť">Zaplatiť</button>
+                                </div>
                             </div>
                         </form>
                     </li>
@@ -214,6 +217,7 @@
     const stage = ref<Stage>(Stage.CONTACT);
     const data = ref<any>({});
     const selectedShippingOptionId = ref<string | null>(null);
+    const paymentLoading = ref<boolean>(false);
 
     onMounted(async () => {
         const cartId = localStorage.getItem("cart_id");
@@ -294,6 +298,8 @@
         let cardElementComplete = cardElementContainer!.classList.contains('StripeElement--complete');
         if (!cardElementComplete) return;
 
+        paymentLoading.value = true;
+
         elements.update({
             amount: cart().value.total,
         });
@@ -329,6 +335,7 @@
             });
         } catch(e) {
             console.error(e);
+            paymentLoading.value = false;
         }
     }
 </script>
@@ -435,6 +442,7 @@
     }
 
     .pay-btn {
+        margin-left: .5rem;
         background-color: var(--color-success);
     }
 
