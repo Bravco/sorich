@@ -29,8 +29,8 @@
                         <nuxt-img class="swiper-product-img" :src="product.thumbnail ?? undefined" format="webp" alt="product-image"/>
                         <p class="swiper-product-title">{{ product.title }}</p>
                         <p class="swiper-product-price">
-                            {{ product.variants[0] ? formatPrice(product.variants[0].prices[0].amount) : "" }}
-                            {{ product.variants[0] ? product.variants[0].prices[0].currency_code.toUpperCase() : "" }}
+                            {{ formatPrice(lowestPrice(product, "eur")?.amount) }}
+                            {{ lowestPrice(product, "eur")?.currency_code.toUpperCase() }}
                         </p>
                     </NuxtLink>
                 </SwiperSlide>
@@ -41,7 +41,7 @@
 
 <script lang="ts" setup>
     const medusaClient = useMedusaClient();
-    const { formatPrice } = useUtils();
+    const { lowestPrice, formatPrice } = useUtils();
 
     const { collections } = await medusaClient.collections.list({
         handle: ["nova-kolekcia"],

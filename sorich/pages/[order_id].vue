@@ -5,10 +5,11 @@
                 <div class="heading">
                     <div>
                         <span>Ďakujeme</span>
-                        <h1>Objednávka úspešná</h1>
+                        <h1>Objednávka potvrdená</h1>
                     </div>
                     <SuccessIcon/>
                 </div>
+                <p>Na emailovu adresu <b>{{ order.email }}</b> bol odoslaný doklad o úspešnej objednávke.</p>
                 <ul class="product-list">
                     <li v-for="product in order.items" :key="product.id" class="product-item">
                         <nuxt-img class="product-img" :src="product.thumbnail" format="webp" alt="product-image"/>

@@ -42,8 +42,8 @@
                             <div class="product-description">
                                 <h4 class="product-title">{{ product.title }}</h4>
                                 <p class="product-price">
-                                    {{ formatPrice(lowestPrice(product)?.amount) }}
-                                    {{ lowestPrice(product)?.currency_code.toUpperCase() }}
+                                    {{ formatPrice(lowestPrice(product, "eur")?.amount) }}
+                                    {{ lowestPrice(product, "eur")?.currency_code.toUpperCase() }}
                                 </p>
                             </div>
                         </NuxtLink>
@@ -79,10 +79,12 @@
 
         switch (orderBy.value) {
             case "ceny (zostupne)":
-                return [...products.value].sort((a, b) => lowestPrice(a)?.amount - lowestPrice(b)?.amount);
+                return [...products.value].sort((a, b) =>
+                    lowestPrice(a, "eur")?.amount - lowestPrice(b, "eur")?.amount);
         
             case "ceny (vzostupne)":
-                return [...products.value].sort((a, b) => lowestPrice(a)?.amount - lowestPrice(b)?.amount).reverse();
+                return [...products.value].sort((a, b) =>
+                    lowestPrice(a, "eur")?.amount - lowestPrice(b, "eur")?.amount).reverse();
             
             default:
                 return products.value;

@@ -43,8 +43,8 @@
                     <v-radio v-for="value in option.values" :key="value" :label="value" :value="value"/>
                 </v-radio-group>
                 <p class="product-price">
-                    {{ formatPrice(lowestPrice(product)?.amount) }}
-                    {{ lowestPrice(product)?.currency_code.toUpperCase() }}
+                    {{ formatPrice(lowestPrice(product, "eur")?.amount) }}
+                    {{ lowestPrice(product, "eur")?.currency_code.toUpperCase() }}
                 </p>
                 <div class="product-actions">
                     <Quantity v-model="quantity"/>
