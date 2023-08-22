@@ -328,12 +328,23 @@
                         setCart(newCart);
                     });
                     if (type === "order") {
+                        let formattedData : any = data;
+
+                        for (let i = 0; i < formattedData.items.length; i++)
+                            formattedData.items[i].total = (formattedData.items[i].total / 100).toFixed(2);
+
+                        formattedData.currency_code = formattedData.currency_code.toUpperCase();
+                        formattedData.subtotal = (formattedData.subtotal / 100).toFixed(2);
+                        formattedData.shipping_total = (formattedData.shipping_total / 100).toFixed(2);
+                        formattedData.discount_total = (formattedData.discount_total / 100).toFixed(2);
+                        formattedData.total = (formattedData.total / 100).toFixed(2);
+
                         useFetch("/api/send", {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json"
                             },
-                            body: JSON.stringify(data),
+                            body: JSON.stringify(formattedData),
                         });
                         navigateTo(`/${data.id}`);
                     }
