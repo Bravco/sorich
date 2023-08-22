@@ -11,6 +11,11 @@ export const useCart = () => {
         if (cartId) {
             medusaClient.carts.retrieve(cartId).then(({ cart }) => {
                 setCart(cart);
+            }).catch(() => {
+                medusaClient.carts.create().then(({ cart }) => {
+                    localStorage.setItem("cart_id", cart.id);
+                    setCart(cart);
+                });   
             });
         } else {
             medusaClient.carts.create().then(({ cart }) => {

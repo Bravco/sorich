@@ -19,6 +19,7 @@
     "nuxt-medusa": "^0.4.0"
   },
   "dependencies": {
+    "@sendgrid/mail": "^7.7.0",
     "@stripe/stripe-js": "^2.1.0",
     "nuxt-swiper": "^1.2.0",
     "stripe": "^13.1.0"

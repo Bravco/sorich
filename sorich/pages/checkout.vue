@@ -232,7 +232,7 @@
         elements = stripe!.elements({
             mode: "payment",
             currency: "eur",
-            amount: cart().value.total,
+            amount: cart().value.total > 0 ? cart().value.total : 1000,
         });
         
         const cardElement = elements.create("card", {
@@ -247,7 +247,6 @@
             cardElement.mount("#card-element");
         }
     });
-    
     
     function setShippingAddress(cartId : string) {
         medusaClient.carts.update(cartId, {
@@ -329,6 +328,13 @@
                         setCart(newCart);
                     });
                     if (type === "order") {
+                        useFetch("/api/send", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(data),
+                        });
                         navigateTo(`/${data.id}`);
                     }
                 });

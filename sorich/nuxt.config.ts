@@ -85,6 +85,9 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       STRIPE_KEY: process.env.STRIPE_KEY,
+      SENDGRID_API_KEY: process.env.SENDGRID_API_KEY,
+      SENDGRID_FROM: process.env.SENDGRID_FROM,
+      SENDGRID_ORDER_PLACED_TEMPLATE_ID: process.env.SENDGRID_ORDER_PLACED_TEMPLATE_ID,
     },
   },
   nitro: {
