@@ -41,12 +41,6 @@ const plugins = [
       capture: true,
     },
   },
-  /*{
-    resolve: `@medusajs/file-local`,
-    options: {
-      upload_dir: "uploads",
-    },
-  },*/
   {
     resolve: "@medusajs/admin",
     /** @type {import('@medusajs/admin').PluginOptions} */
