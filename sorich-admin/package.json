@@ -30,7 +30,7 @@
     "prepare": "npm run build",
     "build": "babel src -d dist --extensions \".ts,.js\"",
 
-    "build:admin": "medusa-admin build --deployment"
+    "build:admin": "medusa-admin build --deployment --backend https://sorich-d658667e93a8.herokuapp.com"
   },
   "dependencies": {
     "@medusajs/admin": "^7.0.0",
