@@ -23,13 +23,11 @@
     "old_start": "cross-env npm run old_build && medusa start",
     "start:custom": "cross-env npm run old_build && node --preserve-symlinks --trace-warnings index.js",
     "dev": "cross-env npm run build:server && medusa develop",
-
     "serve": "medusa start",
     "start": "medusa develop",
     "heroku-postbuild": "medusa migrations run",
     "prepare": "npm run build",
     "build": "babel src -d dist --extensions \".ts,.js\"",
-
     "build:admin": "medusa-admin build --deployment --backend https://sorich-d658667e93a8.herokuapp.com"
   },
   "dependencies": {
@@ -46,6 +44,7 @@
     "cors": "^2.8.5",
     "dotenv": "16.0.3",
     "express": "^4.17.2",
+    "medusa-file-s3": "^1.2.1",
     "medusa-fulfillment-manual": "^1.1.38",
     "medusa-interfaces": "^1.3.7",
     "medusa-payment-manual": "^1.0.24",
