@@ -36,7 +36,10 @@
             </div>
             <aside class="sidebar">
                 <div class="sidebar-box">
-                    <h1>Kupóny</h1>
+                    <div class="summary-lineitem">
+                        <h1>Kupóny</h1>
+                        <Icon v-if="discountLoading" name="svg-spinners:90-ring-with-bg" size="1.5rem"/>
+                    </div>
                     <input v-model="discountCode" class="coupon-input" type="text" placeholder="Zadaj kód kupónu...">
                     <button @click="applyDiscount" class="coupon-btn" aria-label="Aplikuj kupón">Aplikuj</button>
                 </div>
@@ -90,6 +93,7 @@
     const { cart, setCart } = useCart();
 
     const discountCode = ref<string | null>(null);
+    const discountLoading = ref<boolean>(false);
     
     const updateLineItemQuantity = useDebounce(function(cartId, lineItemId, quantity) {
         medusaClient.carts.lineItems.update(cartId, lineItemId, {
@@ -104,6 +108,7 @@
 
     function applyDiscount() {
         if (cart().value && discountCode.value) {
+            discountLoading.value = true;
             medusaClient.carts.update(cart().value.id, {
                 discounts: [
                     { code: discountCode.value },
@@ -111,8 +116,10 @@
             }).then(({ cart: updatedCart }) => {
                 setCart(updatedCart);
                 discountCode.value = null;
+                discountLoading.value = false;
             }).catch(() => {
-                alert("Kupón neexistuje")
+                alert("Kupón neexistuje");
+                discountLoading.value = false;
             });
         }
     }
