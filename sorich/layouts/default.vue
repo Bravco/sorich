@@ -22,6 +22,12 @@
                     </ul>
                 </div>
                 <div class="nav-right">
+                    <button @click.prevent="isSlovak = !isSlovak">
+                        <Icon
+                            :name="isSlovak ? 'emojione:flag-for-slovakia' : 'emojione:flag-for-czechia'" 
+                            size="1.5rem"
+                        />
+                    </button>
                     <NuxtLink class="cart-link" to="/cart">
                         <Icon name="mdi:cart-outline" size="1.5rem"/>
                         <span v-if="cart().value">
@@ -106,6 +112,7 @@
 
     const scrolled = ref<boolean>(false);
     const isMobileMenuActive = ref<boolean>(false);
+    const isSlovak = ref<boolean>(true);
 
     function toggleMobileNav() {
         isMobileMenuActive.value = !isMobileMenuActive.value;
