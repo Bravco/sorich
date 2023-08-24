@@ -10,11 +10,11 @@
                         <form v-if="stage === Stage.CONTACT" @submit.prevent="stage = Stage.ADDRESS" class="process-content">
                             <div class="inputfield">
                                 <label for="email">Email</label>
-                                <input v-model="data.email" type="email" name="email" id="email" placeholder="example@example.com" required>
+                                <input v-model="data.email" type="email" name="email" id="email" required>
                             </div>
                             <div class="inputfield">
                                 <label for="phone">Telefón</label>
-                                <input v-model="data.phone" type="tel" name="phone" id="phone" placeholder="+421 123 123 123">
+                                <input v-model="data.phone" onkeypress="return event.charCode != 32" type="tel" name="phone" id="phone" required>
                             </div>
                             <div class="process-footer">
                                 <button class="next-btn" type="submit" aria-label="Ďalej">Ďalej</button>
@@ -35,11 +35,11 @@
                             <div class="inputfield-row">
                                 <div class="inputfield">
                                     <label for="first-name">Krstné meno</label>
-                                    <input v-model="data.first_name" type="text" name="first-name" id="first-name" placeholder="Stefan" required>
+                                    <input v-model="data.first_name" type="text" name="first-name" id="first-name" required>
                                 </div>
                                 <div class="inputfield">
                                     <label for="last-name">Priezvisko</label>
-                                    <input v-model="data.last_name" type="text" name="last-name" id="last-name" placeholder="Baca" required>
+                                    <input v-model="data.last_name" type="text" name="last-name" id="last-name" required>
                                 </div>
                             </div>
                             <div class="inputfield-row">
@@ -52,27 +52,27 @@
                                 </div>
                                 <div class="inputfield">
                                     <label for="city">Obec</label>
-                                    <input v-model="data.city" type="text" name="city" id="city" placeholder="Kosice" required>
+                                    <input v-model="data.city" type="text" name="city" id="city" required>
                                 </div>
                             </div>
                             <div class="inputfield-row">
                                 <div class="inputfield">
                                     <label for="province">Oblasť</label>
-                                    <input v-model="data.province" type="text" name="province" id="province" placeholder="Kosicky kraj">
+                                    <input v-model="data.province" type="text" name="province" id="province">
                                 </div>
                                 <div class="inputfield">
                                     <label for="postal-code">PSČ</label>
-                                    <input v-model="data.postal_code" type="text" name="postal-code" id="postal-code" placeholder="040 01" required>
+                                    <input v-model="data.postal_code" onkeypress="return event.charCode != 32" type="text" name="postal-code" id="postal-code" required>
                                 </div>
                             </div>
                             <div class="inputfield-row">
                                 <div class="inputfield">
                                     <label for="address1">Adresa 1</label>
-                                    <input v-model="data.address_1" type="text" name="address1" id="address1" placeholder="Farmarska 13" required>
+                                    <input v-model="data.address_1" type="text" name="address1" id="address1" required>
                                 </div>
                                 <div class="inputfield">
                                     <label for="address2">Adresa 2</label>
-                                    <input v-model="data.address_2" type="text" name="address2" id="address2" placeholder="Stefanikova 5">
+                                    <input v-model="data.address_2" type="text" name="address2" id="address2">
                                 </div>
                             </div>
                             <div class="process-footer">
